@@ -6,6 +6,7 @@ import AddFeed from "./AddFeed"
 import EditFeed from "./EditFeed"
 
 function App() {
+
     return (
         <Router>
             <Switch>
@@ -20,5 +21,6 @@ function App() {
 export default App;
 
 if (document.getElementById('app')) {
+
     ReactDOM.render(<App />, document.getElementById('app'));
 }

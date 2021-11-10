@@ -4,9 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
+use App\Models\Feed;
 use App\Repositories\Feed\FeedRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class FeedController extends Controller
@@ -28,26 +30,26 @@ class FeedController extends Controller
         $validator = Validator::make($request->all(),[
             'title' => 'required|max:191',
             'link' => 'required|url',
-            'source' => 'max:191',
-            'source_url' => 'url',
+            'source' => 'nullable|max:191',
+            'source_url' => 'nullable|url',
             'description' => 'required',
             'publish_date' => 'required'
         ]);
+
         if ($validator->fails()) {
 
             return response()->json([
                 'status' => 400,
                 'message' => $validator->errors()
             ]);
-        } else {
-
-            $this->feedRepository->create($request->all());
-
-            return response()->json([
-                'status' => 200,
-                'message' => 'Feed Added Successfully!'
-            ]);
         }
+
+        [$code, $message] = $this->feedRepository->create($request->all());
+
+        return response()->json([
+            'status' => $code,
+            'message' => $message
+        ]);
     }
 
     /**
@@ -87,8 +89,8 @@ class FeedController extends Controller
         $validator = Validator::make($request->all(),[
             'title' => 'required|max:191',
             'link' => 'required|url',
-            'source' => 'max:191',
-            'source_url' => 'url',
+            'source' => 'nullable|max:191',
+            'source_url' => 'nullable|url',
             'description' => 'required',
             'publish_date' => 'required'
         ]);
@@ -99,14 +101,14 @@ class FeedController extends Controller
                 'status' => 400,
                 'message' => $validator->errors()
             ]);
-        } else {
-            $this->feedRepository->update($id, $request->all());
-
-            return response()->json([
-                "status" => 200,
-                "message" => 'Feed Updated Successfully!'
-            ]);
         }
+
+        [$code, $message] = $this->feedRepository->update($id, $request->all());
+
+        return response()->json([
+            'status' => $code,
+            'message' => $message
+        ]);
     }
 
     public function delete($id)

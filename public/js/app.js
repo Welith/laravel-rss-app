@@ -2239,11 +2239,16 @@ var AddFeed = /*#__PURE__*/function (_Component) {
                   }).then(function () {
                     window.location = '/';
                   });
-                } else {
-                  console.log(res);
-
+                } else if (res.data.stack === 400) {
                   _this.setState({
                     error_list: res.data.message
+                  });
+                } else {
+                  sweetalert__WEBPACK_IMPORTED_MODULE_2___default()({
+                    title: "Error!",
+                    text: res.data.message,
+                    icon: "error",
+                    button: "OK"
                   });
                 }
 
@@ -2275,12 +2280,14 @@ var AddFeed = /*#__PURE__*/function (_Component) {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
               className: "card",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-                className: "card-header",
+                className: "card-header text-center",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("h4", {
-                  children: ["Add Feed", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Link, {
+                  children: ["Add Feed", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Link, {
                     to: '/',
                     className: "btn btn-primary btn-sm float-right",
-                    children: " Back"
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
+                      className: "fas fa-long-arrow-alt-left"
+                    }), " Back"]
                   })]
                 })
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
@@ -2366,13 +2373,18 @@ var AddFeed = /*#__PURE__*/function (_Component) {
                       onChange: this.handleInput,
                       value: this.state.description,
                       className: "form-control"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+                      className: "text-danger",
+                      children: this.state.error_list.description
                     })]
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-                    className: "form-group mb-3 align-self-center",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+                    className: "col text-center",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("button", {
                       type: "submit",
-                      className: "btn btn-primary",
-                      children: "Save Feed"
+                      className: "btn btn-success",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
+                        className: "fas fa-save"
+                      }), " Save Feed"]
                     })
                   })]
                 })
@@ -2554,9 +2566,16 @@ var EditFeed = /*#__PURE__*/function (_Component) {
                   }).then(function () {
                     window.location = '/';
                   });
-                } else {
+                } else if (res.data.status === 400) {
                   _this.setState({
                     error_list: res.data.message
+                  });
+                } else {
+                  sweetalert__WEBPACK_IMPORTED_MODULE_2___default()({
+                    title: "Error!",
+                    text: res.data.message,
+                    icon: "error",
+                    button: "OK"
                   });
                 }
 
@@ -2629,12 +2648,14 @@ var EditFeed = /*#__PURE__*/function (_Component) {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
               className: "card",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-                className: "card-header",
+                className: "card-header text-center",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("h4", {
-                  children: ["Edit Feed", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Link, {
+                  children: ["Edit Feed", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Link, {
                     to: '/',
                     className: "btn btn-primary btn-sm float-right",
-                    children: " Back"
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
+                      className: "fas fa-long-arrow-alt-left"
+                    }), " Back"]
                   })]
                 })
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
@@ -2722,11 +2743,13 @@ var EditFeed = /*#__PURE__*/function (_Component) {
                       className: "form-control"
                     })]
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-                    className: "form-group mb-3",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+                    className: "col text-center",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("button", {
                       type: "submit",
-                      className: "btn btn-primary",
-                      children: "Update Feed"
+                      className: "btn btn-success",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
+                        className: "fas fa-save"
+                      }), " Update Feed"]
                     })
                   })]
                 })
@@ -2976,13 +2999,17 @@ var Feed = /*#__PURE__*/function (_Component) {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Link, {
                 to: "/feeds/".concat(item.id),
                 className: "btn btn-success btn-sm",
-                children: "Edit"
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
+                  className: "fas fa-edit"
+                })
               }), "\xA0", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Link, {
                 onClick: function onClick(e) {
                   return _this2.deleteStudent(e, item.id);
                 },
                 className: "btn btn-danger btn-sm",
-                children: "Delete"
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
+                  className: "fas fa-trash-alt"
+                })
               })]
             })]
           }, item.id);
@@ -3001,10 +3028,12 @@ var Feed = /*#__PURE__*/function (_Component) {
                 className: "card-header",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h4", {
                   className: "text-center",
-                  children: ["RSS Feed Preview", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Link, {
+                  children: ["RSS Feed Preview", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Link, {
                     to: '/feeds',
                     className: "btn btn-primary btn-sm float-right",
-                    children: " Add Feed"
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
+                      className: "fas fa-plus-square"
+                    }), " Add Feed"]
                   })]
                 })
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {

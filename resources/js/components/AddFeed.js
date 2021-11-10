@@ -6,6 +6,7 @@ import swal from 'sweetalert';
 class AddFeed extends Component {
 
     state = {
+
         title: '',
         link: '',
         source: '',
@@ -16,12 +17,15 @@ class AddFeed extends Component {
     }
 
     handleInput = (e) => {
+
         this.setState({
+
             [e.target.name]: e.target.value
         });
     }
 
     saveFeed = async (e) => {
+
         e.preventDefault();
 
         const res = await axios.post('/api/feeds', this.state);
@@ -34,26 +38,36 @@ class AddFeed extends Component {
                 icon: "success",
                 button: "OK",
             }).then(function () {
+
                 window.location = '/';
             });
+        }  else if (res.data.stack === 400) {
+
+            this.setState({
+
+                error_list: res.data.message,
+            })
         } else {
 
-            console.log(res)
-            this.setState({
-                error_list: res.data.message,
+            swal({
+                title: "Error!",
+                text: res.data.message,
+                icon: "error",
+                button: "OK",
             })
         }
     }
 
     render() {
+
         return(
             <div className="container align-items-center justify-content-center">
                 <div className="row align-items-center justify-content-center">
                     <div className="col-md-6">
                         <div className="card">
-                            <div className="card-header">
+                            <div className="card-header text-center">
                                 <h4>Add Feed
-                                    <Link to={'/'} className="btn btn-primary btn-sm float-right"> Back</Link>
+                                    <Link to={'/'} className="btn btn-primary btn-sm float-right"><i className="fas fa-long-arrow-alt-left"></i> Back</Link>
                                 </h4>
                             </div>
                             <div className="card-body">
@@ -86,9 +100,10 @@ class AddFeed extends Component {
                                     <div className="form-group mb-3">
                                         <label>Description</label>
                                         <textarea name="description" onChange={this.handleInput} value={this.state.description} className="form-control"/>
+                                        <span className="text-danger">{this.state.error_list.description}</span>
                                     </div>
-                                    <div className="form-group mb-3 align-self-center">
-                                        <button type="submit" className="btn btn-primary">Save Feed</button>
+                                    <div className="col text-center">
+                                        <button type="submit" className="btn btn-success"><i className="fas fa-save"></i> Save Feed</button>
                                     </div>
                                 </form>
                             </div>

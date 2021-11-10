@@ -61,24 +61,33 @@ class EditFeed extends Component {
 
                 window.location = '/';
             });
-        } else {
+        } else if (res.data.status === 400) {
 
             this.setState({
 
                 error_list: res.data.message
             })
+        } else {
+
+            swal({
+                title: "Error!",
+                text: res.data.message,
+                icon: "error",
+                button: "OK",
+            })
         }
     }
 
     render() {
+
         return(
             <div className="container align-items-center justify-content-center">
                 <div className="row align-items-center justify-content-center">
                     <div className="col-md-6 align-items-center justify-content-center">
                         <div className="card">
-                            <div className="card-header">
+                            <div className="card-header text-center">
                                 <h4>Edit Feed
-                                    <Link to={'/'} className="btn btn-primary btn-sm float-right"> Back</Link>
+                                    <Link to={'/'} className="btn btn-primary btn-sm float-right"><i className="fas fa-long-arrow-alt-left"></i> Back</Link>
                                 </h4>
                             </div>
                             <div className="card-body">
@@ -112,8 +121,8 @@ class EditFeed extends Component {
                                         <label>Description</label>
                                         <textarea name="description" onChange={this.handleInput} value={this.state.description} className="form-control"/>
                                     </div>
-                                    <div className="form-group mb-3">
-                                        <button type="submit" className="btn btn-primary">Update Feed</button>
+                                    <div className="col text-center">
+                                        <button type="submit" className="btn btn-success"><i className="fas fa-save"></i> Update Feed</button>
                                     </div>
                                 </form>
                             </div>

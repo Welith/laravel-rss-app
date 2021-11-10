@@ -50,6 +50,7 @@ class Feed extends Component {
                 icon: "success",
                 button: "OK",
             });
+
             deleteButton.closest("tr").remove()
         }
     }
@@ -64,6 +65,7 @@ class Feed extends Component {
         let feed_HTML_TABLE;
 
         if (this.state.loading) {
+
             feed_HTML_TABLE = <tr><td colSpan="8">Loading ...</td></tr>
         } else {
 
@@ -89,14 +91,15 @@ class Feed extends Component {
                             {item.description}
                         </td>
                         <td>
-                            <Link to={`/feeds/${item.id}`} className="btn btn-success btn-sm">Edit</Link>
+                            <Link to={`/feeds/${item.id}`} className="btn btn-success btn-sm"><i className="fas fa-edit"></i></Link>
                             &nbsp;
-                            <Link onClick={(e) => this.deleteStudent(e, item.id)} className="btn btn-danger btn-sm">Delete</Link>
+                            <Link onClick={(e) => this.deleteStudent(e, item.id)} className="btn btn-danger btn-sm"><i className="fas fa-trash-alt"></i></Link>
                         </td>
                     </tr>
                 );
             });
         }
+
         return(
             <div className="container align-items-center justify-content-center">
                 <div className="row align-items-center justify-content-center">
@@ -104,7 +107,7 @@ class Feed extends Component {
                         <div className="card">
                             <div className="card-header">
                                 <h4 className="text-center">RSS Feed Preview
-                                    <Link to={'/feeds'} className="btn btn-primary btn-sm float-right"> Add Feed</Link>
+                                    <Link to={'/feeds'} className="btn btn-primary btn-sm float-right"><i className="fas fa-plus-square"></i> Add Feed</Link>
                                 </h4>
                             </div>
                             <div className="card-body">

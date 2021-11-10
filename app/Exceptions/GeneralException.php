@@ -23,7 +23,7 @@ class GeneralException extends Exception
      * @param  int  $code
      * @param  Throwable|null  $previous
      */
-    public function __construct($message = '', $code = 0, Throwable $previous = null)
+    public function __construct($message = '', $code = 500, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
@@ -46,8 +46,8 @@ class GeneralException extends Exception
     public function render(Request $request): Response
     {
         return response([
-            'error'  => true,
-            'errors' => "Something went wrong"
+            'status'  => 500,
+            'message' => "Internal Service Error"
         ]);
     }
 }

@@ -15,8 +15,8 @@ class CreateFeedsTable extends Migration
     {
         Schema::create('feeds', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('link');
+            $table->string('title')->unique();
+            $table->string('link')->unique();
             $table->string('source')->nullable(true);
             $table->string('source_url')->nullable(true);
             $table->dateTime('publish_date');

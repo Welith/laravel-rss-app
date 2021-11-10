@@ -3,13 +3,15 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import Feed from "./Feed";
 import AddFeed from "./AddFeed"
+import EditFeed from "./EditFeed"
 
 function App() {
     return (
         <Router>
             <Switch>
                 <Route exact path="/" component={Feed} />
-                <Route path="/add-feeds" component={AddFeed}/>
+                <Route path="/feeds/:id" component={EditFeed}/>
+                <Route path="/feeds" component={AddFeed}/>
             </Switch>
         </Router>
     );

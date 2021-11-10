@@ -10,7 +10,7 @@ class Feed extends Component {
 
     async componentDidMount() {
 
-        const resp = await axios.get('/api/feeds');
+        const resp = await axios.get('/api/feeds/list');
 
         console.log(resp.data.feeds.data)
 
@@ -54,9 +54,9 @@ class Feed extends Component {
                             {item.description}
                         </td>
                         <td>
-                            <Link to={`edit-feed/${item.id}`} className="btn btn-success btn-sm">Edit</Link>
+                            <Link to={`/feeds/${item.id}`} className="btn btn-success btn-sm">Edit</Link>
                             &nbsp;
-                            <Link to={`delete-feed/${item.id}`} className="btn btn-danger btn-sm">Delete</Link>
+                            <Link onClick={(e) => this.deleteStudent} className="btn btn-danger btn-sm">Delete</Link>
                         </td>
                     </tr>
                 );
@@ -70,7 +70,7 @@ class Feed extends Component {
                         <div className="card">
                             <div className="card-header">
                                 <h4 className="text-center">Feed Preview
-                                    <Link to={'add-feeds'} className="btn btn-primary btn-sm float-right"> Add Feed</Link>
+                                    <Link to={'/feeds'} className="btn btn-primary btn-sm float-right"> Add Feed</Link>
                                 </h4>
                             </div>
                             <div className="card-body">

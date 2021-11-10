@@ -51,4 +51,51 @@ class FeedController extends Controller
             'feeds' => $feeds
         ]);
     }
+
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
+    public function show($id): JsonResponse
+    {
+        $feed = $this->feedRepository->find($id);
+
+        return response()->json([
+            'status' => 200,
+            'feed' => $feed
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse
+     */
+    public function edit(Request $request, $id): JsonResponse
+    {
+        $request->validate([
+            'title' => 'required',
+            'link' => 'required',
+            'description' => 'required',
+            'publish_date' => 'required'
+        ]);
+
+        $this->feedRepository->update($id, $request->all());
+
+        return response()->json([
+            "status" => 200,
+            "message" => 'Feed Updated Successfully!'
+        ]);
+    }
+
+    public function delete($id)
+    {
+        $this->feedRepository->delete($id);
+
+        return response()->json([
+            "status" => 200,
+            "message" => 'Feed Deleted Successfully!'
+        ]);
+    }
+
 }

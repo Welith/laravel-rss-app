@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\API\FeedController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,9 +13,8 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('/add-feeds', [FeedController::class, 'store']);
-Route::get('/feeds', [FeedController::class, 'index']);
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('/feeds', [FeedController::class, 'store']);
+Route::get('/feeds/list', [FeedController::class, 'index']);
+Route::get('/feeds/{id}', [FeedController::class, 'show']);
+Route::put('/feeds/{id}/edit', [FeedController::class, 'edit']);
+Route::delete('/feeds/{id}/delete', [FeedController::class, 'delete']);

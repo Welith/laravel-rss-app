@@ -9,7 +9,7 @@ function App() {
         <Router>
             <Switch>
                 <Route exact path="/" component={Feed} />
-                <Route path="/add-feed" component={AddFeed}/>
+                <Route path="/add-feeds" component={AddFeed}/>
             </Switch>
         </Router>
     );

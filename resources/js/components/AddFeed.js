@@ -21,7 +21,20 @@ class AddFeed extends Component {
     saveFeed = async (e) => {
         e.preventDefault();
 
-        const res = await axios.post('/api/add-feed', this.state);
+        const res = await axios.post('/api/add-feeds', this.state);
+
+        if (res.data.status === 200) {
+
+            console.log(res.data.message);
+            this.setState({
+                title: '',
+                link: '',
+                source: '',
+                source_url: '',
+                publish_date: '',
+                description: ''
+            });
+        }
     }
 
     render() {
@@ -36,10 +49,10 @@ class AddFeed extends Component {
                                 </h4>
                             </div>
                             <div className="card-body">
-                                <form onSumbit={this.saveFeed}>
+                                <form onSubmit={this.saveFeed}>
                                     <div className="form-group mb-3">
                                         <label>Title</label>
-                                        <input type="text" name="title" value={this.state.name} onChange={this.handleInput} className="form-control"/>
+                                        <input type="text" name="title" value={this.state.title} onChange={this.handleInput} className="form-control"/>
                                     </div>
                                     <div className="form-group mb-3">
                                         <label>Link</label>

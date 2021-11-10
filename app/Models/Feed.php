@@ -19,4 +19,6 @@ class Feed extends Model
         'publish_date',
         'description'
     ];
+
+
 }

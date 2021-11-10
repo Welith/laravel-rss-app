@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {Link} from 'react-router-dom';
+import swal from "sweetalert";
 
 class EditFeed extends Component {
 
@@ -12,7 +13,8 @@ class EditFeed extends Component {
         source: '',
         source_url: '',
         publish_date: '',
-        description: ''
+        description: '',
+        error_list: []
     }
 
     handleInput = (e) => {
@@ -49,7 +51,22 @@ class EditFeed extends Component {
 
         if (res.data.status === 200) {
 
-            this.props.history.push("/");
+            swal({
+
+                title: "Updated!",
+                text: res.data.message,
+                icon: "success",
+                button: "OK",
+            }).then(function () {
+
+                window.location = '/';
+            });
+        } else {
+
+            this.setState({
+
+                error_list: res.data.message
+            })
         }
     }
 
@@ -69,22 +86,27 @@ class EditFeed extends Component {
                                     <div className="form-group mb-3">
                                         <label>Title</label>
                                         <input type="text" name="title" value={this.state.title} onChange={this.handleInput} className="form-control"/>
+                                        <span className="text-danger">{this.state.error_list.title}</span>
                                     </div>
                                     <div className="form-group mb-3">
                                         <label>Link</label>
                                         <input type="text" name="link" onChange={this.handleInput} value={this.state.link} className="form-control"/>
+                                        <span className="text-danger">{this.state.error_list.link}</span>
                                     </div>
                                     <div className="form-group mb-3">
                                         <label>Source</label>
                                         <input type="text" name="source" onChange={this.handleInput} value={this.state.source} className="form-control"/>
+                                        <span className="text-danger">{this.state.error_list.source}</span>
                                     </div>
                                     <div className="form-group mb-3">
                                         <label>Source URL</label>
                                         <input type="text" name="source_url" onChange={this.handleInput} value={this.state.source_url} className="form-control"/>
+                                        <span className="text-danger">{this.state.error_list.source_url}</span>
                                     </div>
                                     <div className="form-group mb-3">
                                         <label>Publish Date</label>
                                         <input type="datetime-local" name="publish_date" onChange={this.handleInput} value={this.state.publish_date} className="form-control"/>
+                                        <span className="text-danger">{this.state.error_list.publish_date}</span>
                                     </div>
                                     <div className="form-group mb-3">
                                         <label>Description</label>

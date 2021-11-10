@@ -17,8 +17,8 @@ class CreateFeedsTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('link');
-            $table->string('source');
-            $table->string('source_url');
+            $table->string('source')->nullable(true);
+            $table->string('source_url')->nullable(true);
             $table->dateTime('publish_date');
             $table->text('description');
             $table->timestamps();

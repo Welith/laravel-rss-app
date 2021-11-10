@@ -39,15 +39,15 @@ class GeneralException extends Exception
     /**
      * Render the exception into an HTTP response.
      *
-     * @param  Request
+     * @param  Request $request
      *
      * @return Response
      */
-    public function render($request): Response
+    public function render(Request $request): Response
     {
         return response([
             'error'  => true,
-            'errors' => 'Something went wrong! Try Again!'
+            'errors' => "Something went wrong"
         ]);
     }
 }

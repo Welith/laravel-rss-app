@@ -107,8 +107,22 @@ class FeedController extends Controller
      */
     public function fetchFromGolang(Request $request): JsonResponse
     {
+        $validator = Validator::make($request->all(), [
+            'urls' => 'required',
+            'username' => 'required',
+            'password' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+
+            return response()->json([
+                'status' => RequestConstants::STATUS_CODES["validation"],
+                'message' => $validator->errors()
+            ]);
+        }
+
         #Authenticaiton
-        $accessToken = $this->authRequestManager->login();
+        $accessToken = $this->authRequestManager->login($request->all());
 
         if (!$accessToken) {
 
@@ -129,7 +143,7 @@ class FeedController extends Controller
         }
 
         // For safety of JWT tokens
-        $this->authRequestManager->logout();
+        $this->authRequestManager->logout($request->all());
 
         foreach ($feeds as $feed) {
 

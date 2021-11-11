@@ -2862,9 +2862,9 @@ var Feed = /*#__PURE__*/function (_Component) {
       link: null,
       publish_date_from: null,
       publish_date_to: null,
-      urls: {
-        "urls": "https://www.geeksforgeeks.org/feed/,https://www.theboltonnews.co.uk/news/rss/".split(",")
-      }
+      urls: "https://www.geeksforgeeks.org/feed/,https://www.theboltonnews.co.uk/news/rss/".split(","),
+      username: "emerchantpay",
+      password: "password"
     });
 
     _defineProperty(_assertThisInitialized(_this), "componentDidMount", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
@@ -3015,16 +3015,21 @@ var Feed = /*#__PURE__*/function (_Component) {
     key: "fetchFeeds",
     value: function () {
       var _fetchFeeds = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(e) {
-        var res;
+        var data, res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
                 e.preventDefault();
-                _context5.next = 3;
-                return axios.post("/api/feeds/fetch-go", this.state.urls);
+                data = {
+                  urls: this.state.urls,
+                  username: this.state.username,
+                  password: this.state.password
+                };
+                _context5.next = 4;
+                return axios.post("/api/feeds/fetch-go", data);
 
-              case 3:
+              case 4:
                 res = _context5.sent;
                 console.log(res);
 
@@ -3046,7 +3051,7 @@ var Feed = /*#__PURE__*/function (_Component) {
                   });
                 }
 
-              case 6:
+              case 7:
               case "end":
                 return _context5.stop();
             }

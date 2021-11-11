@@ -164,7 +164,7 @@ abstract class AbstractHttpRequest implements HttpRequestInterface
             }
 
             if (is_array($data)) {
-                $data = json_encode($data, JSON_THROW_ON_ERROR, 512);
+                $data = json_encode($data, JSON_THROW_ON_ERROR);
             }
 
             $data = [RequestOptions::BODY => $data];

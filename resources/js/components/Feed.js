@@ -15,7 +15,9 @@ class Feed extends Component {
         link: null,
         publish_date_from: null,
         publish_date_to: null,
-        urls: {"urls": (process.env.MIX_RSS_FEED_ARRAY).split(",")}
+        urls: (process.env.MIX_RSS_FEED_ARRAY).split(","),
+        username: process.env.MIX_GOLANG_USERNAME,
+        password: process.env.MIX_GOLANG_PASSWORD
 
     }
 
@@ -98,7 +100,8 @@ class Feed extends Component {
 
         e.preventDefault();
 
-        const res = await axios.post(`/api/feeds/fetch-go`, this.state.urls);
+        const data = { urls: this.state.urls, username: this.state.username, password: this.state.password};
+        const res = await axios.post(`/api/feeds/fetch-go`, data);
         console.log(res)
         if (res.data.status === 200) {
 

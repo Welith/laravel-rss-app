@@ -28,24 +28,27 @@ class AuthRequestManager extends AbstractHttpRequest
     }
 
     /**
-     * @throws GuzzleException
-     * @throws GeneralException
-     * @throws \JsonException
-     */
-    public function login()
-    {
-        return $this->post('/login', ['username' => getenv("GOLANG_USERNAME"), 'password' => getenv("GOLANG_PASSWORD")]);
-    }
-
-    /**
+     * @param array $data
      * @return mixed
      * @throws GeneralException
      * @throws GuzzleException
      * @throws \JsonException
      */
-    public function logout(): mixed
+    public function login(array $data): mixed
     {
-        $this->_headers->add('Authorization', "Bearer " . $this->login());
+        return $this->post('/login', ['username' => $data['username'], 'password' => $data['password']]);
+    }
+
+    /**
+     * @param array $data
+     * @return mixed
+     * @throws GeneralException
+     * @throws GuzzleException
+     * @throws \JsonException
+     */
+    public function logout(array $data): mixed
+    {
+        $this->_headers->add('Authorization', "Bearer " . $this->login($data));
         return $this->post('/logout');
     }
 

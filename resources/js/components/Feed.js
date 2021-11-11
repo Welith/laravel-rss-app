@@ -14,7 +14,8 @@ class Feed extends Component {
         title: null,
         link: null,
         publish_date_from: null,
-        publish_date_to: null
+        publish_date_to: null,
+        urls: {"urls": ["https://www.geeksforgeeks.org/feed/", "https://www.theboltonnews.co.uk/news/rss/"]}
 
     }
 
@@ -93,9 +94,38 @@ class Feed extends Component {
         }
     }
 
+    async fetchFeeds(e) {
+
+        e.preventDefault();
+
+        const res = await axios.post(`/api/feeds/fetch-go`, this.state.urls);
+        console.log(res)
+        if (res.data.status === 200) {
+
+            swal({
+                title: "Success!",
+                text: res.data.message,
+                icon: "success",
+                button: "OK",
+            }).then(function () {
+
+                window.location = '/';
+            });
+
+        } else {
+
+            swal({
+                title: "Error!",
+                text: res.data.message,
+                icon: "error",
+                button: "OK",
+            });
+        }
+    }
+
     async handlePageChange(pageNumber) {
 
-        await this.getUserData(pageNumber)
+        await this.getUserData(pageNumber, this.state.link, this.state.title, this.state.publish_date_from, this.state.publish_date_to)
     }
 
     render() {
@@ -133,6 +163,7 @@ class Feed extends Component {
                             <div className="card-header">
                                 <h4 className="text-center">RSS Feed Preview
                                     <Link to={'/feeds'} className="btn btn-primary btn-sm float-right"><i className="fas fa-plus-square"></i> Add Feed</Link>
+                                    <button onClick={ (e) => this.fetchFeeds(e)} className="btn btn-primary btn-sm float-left"><i className="fas fa-plus-square"></i> Fetch Feeds</button>
                                 </h4>
                             </div>
                             <div className="card-header align-items-center justify-content-center">
@@ -145,7 +176,7 @@ class Feed extends Component {
                                     <input type="datetime-local" className="form-control m-1" value={this.state.publish_date_from} onChange={this.handleInput} name="publish_date_from" id="publish_date_from"/>
 
                                     <label htmlFor="publish_date_to" className="m-1">Date To:</label>
-                                    <input type="datetime-local" className="form-control m-1" value={this.state.publish_date_to} name="publish_date_to" id="publish_date_to"/>
+                                    <input type="datetime-local" className="form-control m-1" value={this.state.publish_date_to} onChange={this.handleInput} name="publish_date_to" id="publish_date_to"/>
 
                                     <button type="submit" className="btn btn-primary btn-sm float-right">Filter</button>
 

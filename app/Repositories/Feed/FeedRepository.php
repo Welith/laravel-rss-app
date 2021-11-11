@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Feed;
 
+use App\Constants\RequestConstants;
 use App\Exceptions\GeneralException;
 use App\Models\Feed;
 use App\Repositories\BaseRepository;
@@ -24,26 +25,25 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
     {
         if ($this->checkForDuplicates($attributes)) {
 
-            return [422, "Feed with given title and/or link already exists."];
+            return [RequestConstants::STATUS_CODES['duplicate'], RequestConstants::RESPONSES['duplicate']];
         }
 
         DB::beginTransaction();
 
         try {
 
-            $attributes['description'] = $attributes['description'] ?? preg_replace('/<[^>]*>/', '', $attributes['description']);
-
+            $attributes['description'] = preg_replace('/<[^>]*>/', '', $attributes['description']) ;
             $this->model->create($attributes);
 
         } catch (Exception $exception) {
-
+            dd($exception);
             DB::rollBack();
             throw new GeneralException($exception->getMessage());
         }
 
         DB::commit();
 
-        return [200, "Feed Successfully Added!"];
+        return [RequestConstants::STATUS_CODES['success'], RequestConstants::RESPONSES['created']];
     }
 
     /**
@@ -79,7 +79,7 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
 
         if (!$feed) {
 
-            return [404, "Feed not found!"];
+            return [RequestConstants::STATUS_CODES['not_found'], RequestConstants::RESPONSES['not_found']];
         }
 
         DB::beginTransaction();
@@ -92,7 +92,7 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
 
             if ($duplicate) {
 
-                return [422, "Feed with given title and/or link already exists."];
+                return [RequestConstants::STATUS_CODES['duplicate'], RequestConstants::RESPONSES['duplicate']];
             }
 
             $feed->fill($attributes);
@@ -106,7 +106,7 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
 
         DB::commit();
 
-        return [200, "Feed Successfully Updated!"];
+        return [RequestConstants::STATUS_CODES['success'], RequestConstants::RESPONSES['updated']];
     }
 
     /**
@@ -150,12 +150,12 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
 
         if (!$feed) {
 
-            return [404, "Feed not found!"];
+            return [RequestConstants::STATUS_CODES['not_found'], RequestConstants::RESPONSES['not_found']];
         }
 
         $feed->delete();
 
-        return [200, "Feed Deleted Successfully!"];
+        return [RequestConstants::STATUS_CODES['success'], RequestConstants::RESPONSES['deleted']];
     }
 
     /**

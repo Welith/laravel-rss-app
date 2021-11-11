@@ -18,3 +18,4 @@ Route::get('/feeds/list', [FeedController::class, 'index']);
 Route::get('/feeds/{id}', [FeedController::class, 'show']);
 Route::put('/feeds/{id}/edit', [FeedController::class, 'edit']);
 Route::delete('/feeds/{id}/delete', [FeedController::class, 'delete']);
+Route::post('/feeds/fetch-go', [FeedController::class, 'fetchFromGolang']);

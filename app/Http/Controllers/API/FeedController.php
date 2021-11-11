@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Constants\RequestConstants;
 use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
 use App\Repositories\Feed\FeedRepository;
+use App\RequestManagers\FeedRequestManager;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -13,9 +16,12 @@ class FeedController extends Controller
 {
     private FeedRepository $feedRepository;
 
-    public function __construct(FeedRepository $feedRepository)
+    private FeedRequestManager $feedRequestManager;
+
+    public function __construct(FeedRepository $feedRepository, FeedRequestManager $feedRequestManager)
     {
         $this->feedRepository = $feedRepository;
+        $this->feedRequestManager = $feedRequestManager;
     }
 
     /**
@@ -37,7 +43,7 @@ class FeedController extends Controller
         if ($validator->fails()) {
 
             return response()->json([
-                'status' => 400,
+                'status' => RequestConstants::STATUS_CODES['validation'],
                 'message' => $validator->errors()
             ]);
         }
@@ -61,7 +67,7 @@ class FeedController extends Controller
         $feeds = $this->feedRepository->getFiltered($filters);
 
         return response()->json([
-            'status' => 200,
+            'status' => RequestConstants::STATUS_CODES['success'],
             'feeds' => $feeds
         ]);
     }
@@ -77,14 +83,58 @@ class FeedController extends Controller
         if (!$feed) {
 
             return response()->json([
-                'status' => 404,
-                'feed' => "Feed Not Found!"
+                'status' => RequestConstants::STATUS_CODES['not_found'],
+                'message' => RequestConstants::RESPONSES['not_found']
             ]);
         }
 
         return response()->json([
-            'status' => 200,
+            'status' => RequestConstants::STATUS_CODES['success'],
             'feed' => $feed
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws GeneralException
+     * @throws GuzzleException
+     * @throws \JsonException
+     */
+    public function fetchFromGolang(Request $request)
+    {
+        $feeds = $this->feedRequestManager->getFeeds($request->all());
+
+        if (empty($feeds)) {
+
+            return response()->json([
+                'status' => RequestConstants::STATUS_CODES['not_found'],
+                'message' => RequestConstants::RESPONSES['not_found']
+            ]);
+        }
+
+        foreach ($feeds as $feed) {
+
+            $validator = Validator::make($feed, [
+                'title' => 'required|max:191',
+                'link' => 'required|url',
+                'source' => 'nullable|max:191',
+                'source_url' => 'nullable|url',
+                'description' => 'required',
+                'publish_date' => 'required'
+            ]);
+
+            $duplicate = $this->feedRepository->checkForDuplicates($feed);
+
+            if (!$validator->fails() && !$duplicate) {
+
+                $this->feedRepository->create($feed);
+            }
+        }
+
+        return response()->json([
+            'status' => RequestConstants::STATUS_CODES['success'],
+            'message' => RequestConstants::RESPONSES['created']
         ]);
     }
 
@@ -108,7 +158,7 @@ class FeedController extends Controller
         if ($validator->fails()) {
 
             return response()->json([
-                'status' => 400,
+                'status' => RequestConstants::STATUS_CODES['validation'],
                 'message' => $validator->errors()
             ]);
         }

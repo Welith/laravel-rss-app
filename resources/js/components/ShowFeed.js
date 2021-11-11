@@ -64,28 +64,28 @@ class ShowFeed extends Component {
                             </div>
                             <div className="card-body">
                                     <div className="form-group mb-3">
-                                        <label>Title</label>
-                                        <label className="form-control">{this.state.title}</label>
+                                        <h5>Title</h5>
+                                        <p className="text-justify">{this.state.title}</p>
                                     </div>
                                     <div className="form-group mb-3">
-                                        <label>Link</label>
-                                        <label className="form-control">{this.state.link}</label>
+                                        <h5>Link</h5>
+                                        <p className="text-justify">{this.state.link}</p>
                                     </div>
                                     <div className="form-group mb-3">
-                                        <label>Source</label>
-                                        <label className="form-control">{this.state.source}</label>
+                                        <h5>Source</h5>
+                                        <p className="text-justify">{this.state.source}</p>
                                     </div>
                                     <div className="form-group mb-3">
-                                        <label>Source URL</label>
-                                        <label className="form-control">{this.state.source_url}</label>
+                                        <h5>Source URL</h5>
+                                        <p className="text-justify">{this.state.source_url}</p>
                                     </div>
                                     <div className="form-group mb-3">
-                                        <label>Publish Date</label>
-                                        <label className="form-control">{this.state.publish_date}</label>
+                                        <h5>Publish Date</h5>
+                                        <p className="text-justify">{this.state.publish_date}</p>
                                     </div>
                                     <div className="form-group mb-3">
-                                        <label>Description</label>
-                                        <label className="form-control">{this.state.description}</label>
+                                        <h5>Description</h5>
+                                        <p className="text-justify">{this.state.description}</p>
                                     </div>
                             </div>
                         </div>

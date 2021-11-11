@@ -6,8 +6,6 @@ use App\Exceptions\GeneralException;
 use App\Models\Feed;
 use App\Repositories\BaseRepository;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -49,6 +47,7 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
 
     /**
      * @param array $attributes
+     * @param null $id
      * @return bool
      */
     public function checkForDuplicates(array $attributes, $id = null): bool
@@ -57,18 +56,12 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
 
         if ($id) {
 
-            $query->where('id', "!=", $id);
+            $feeds = DB::select("SELECT * from feeds WHERE id != :id AND (link = :link OR title = :title)", ['id' => $id, 'link' => $attributes['link'], 'title' => $attributes['title'] ]);
+
+            return (bool)$feeds;
         }
 
-        if (isset($attributes['link'])) {
-
-            $query->where('link', "=", $attributes['link'], "or");
-        }
-
-        if (isset($attributes['title'])) {
-
-            $query->where('title', "=", $attributes['title'], "or");
-        }
+        $query->where('link', "=", $attributes['link'], "or")->where('title', "=", $attributes['title'], "or");
 
         return $query->exists();
     }
@@ -83,8 +76,6 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
     {
         $feed = $this->model->find($id);
 
-        $duplicate = false;
-
         if (!$feed) {
 
             return [404, "Feed not found!"];
@@ -96,18 +87,14 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
 
             $attributes['description'] = $attributes['description'] ?? preg_replace('/<[^>]*>/', '', $attributes['description']);
 
-            $feedUpdated = $feed->fill($attributes);
-
-            if ($feedUpdated->isDirty('link') || $feedUpdated->isDirty('title')) {
-
-                $duplicate = $this->checkForDuplicates($attributes);
-            }
+            $duplicate = $this->checkForDuplicates($attributes, $id);
 
             if ($duplicate) {
 
                 return [422, "Feed with given title and/or link already exists."];
             }
 
+            $feed->fill($attributes);
             $feed->save();
 
         } catch (Exception $exception) {
@@ -150,6 +137,24 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
         }
 
         return $query->get();
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function delete($id): array
+    {
+        $feed = $this->model->find($id);
+
+        if (!$feed) {
+
+            return [404, "Feed not found!"];
+        }
+
+        $feed->delete();
+
+        return [200, "Feed Deleted Successfully!"];
     }
 
     /**

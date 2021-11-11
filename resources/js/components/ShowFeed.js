@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Link} from 'react-router-dom';
 import swal from "sweetalert";
 
-class EditFeed extends Component {
+class ShowFeed extends Component {
 
 
     feed_id = this.props.match.params.id;
@@ -13,8 +13,7 @@ class EditFeed extends Component {
         source: '',
         source_url: '',
         publish_date: '',
-        description: '',
-        error_list: []
+        description: ''
     }
 
     handleInput = (e) => {
@@ -29,15 +28,13 @@ class EditFeed extends Component {
 
         if (res.data.status === 200) {
 
-            let date = new Date(res.data.feed.publish_date)
-
             this.setState({
 
                 title: res.data.feed.title,
                 link: res.data.feed.link,
                 source: res.data.feed.source,
                 source_url: res.data.feed.source_url,
-                publish_date: (date.toISOString()).slice(0, -5),
+                publish_date: res.data.feed.publish_date,
                 description: res.data.feed.description
             });
         } else {
@@ -51,41 +48,6 @@ class EditFeed extends Component {
         }
     }
 
-    updateFeed = async (e) => {
-
-        e.preventDefault();
-
-        const res = await axios.put(`/api/feeds/${this.feed_id}/edit`, this.state);
-
-        if (res.data.status === 200) {
-
-            swal({
-
-                title: "Updated!",
-                text: res.data.message,
-                icon: "success",
-                button: "OK",
-            }).then(function () {
-
-                window.location = '/';
-            });
-        } else if (res.data.status === 400) {
-
-            this.setState({
-
-                error_list: res.data.message
-            })
-        } else {
-
-            swal({
-                title: "Error!",
-                text: res.data.message,
-                icon: "error",
-                button: "OK",
-            })
-        }
-    }
-
     render() {
 
         return(
@@ -94,45 +56,35 @@ class EditFeed extends Component {
                     <div className="col-md-6 align-items-center justify-content-center">
                         <div className="card">
                             <div className="card-header text-center">
-                                <h4>Edit Feed
+                                <h4>Feed # {this.feed_id}
                                     <Link to={'/'} className="btn btn-primary btn-sm float-right"><i className="fas fa-long-arrow-alt-left"></i> Back</Link>
                                 </h4>
                             </div>
                             <div className="card-body">
-                                <form onSubmit={this.updateFeed}>
                                     <div className="form-group mb-3">
                                         <label>Title</label>
-                                        <input type="text" name="title" value={this.state.title} onChange={this.handleInput} className="form-control"/>
-                                        <span className="text-danger">{this.state.error_list.title}</span>
+                                        <label className="form-control">{this.state.title}</label>
                                     </div>
                                     <div className="form-group mb-3">
                                         <label>Link</label>
-                                        <input type="text" name="link" onChange={this.handleInput} value={this.state.link} className="form-control"/>
-                                        <span className="text-danger">{this.state.error_list.link}</span>
+                                        <label className="form-control">{this.state.link}</label>
                                     </div>
                                     <div className="form-group mb-3">
                                         <label>Source</label>
-                                        <input type="text" name="source" onChange={this.handleInput} value={this.state.source} className="form-control"/>
-                                        <span className="text-danger">{this.state.error_list.source}</span>
+                                        <label className="form-control">{this.state.source}</label>
                                     </div>
                                     <div className="form-group mb-3">
                                         <label>Source URL</label>
-                                        <input type="text" name="source_url" onChange={this.handleInput} value={this.state.source_url} className="form-control"/>
-                                        <span className="text-danger">{this.state.error_list.source_url}</span>
+                                        <label className="form-control">{this.state.source_url}</label>
                                     </div>
                                     <div className="form-group mb-3">
                                         <label>Publish Date</label>
-                                        <input type="datetime-local" name="publish_date" onChange={this.handleInput} value={this.state.publish_date} className="form-control"/>
-                                        <span className="text-danger">{this.state.error_list.publish_date}</span>
+                                        <label className="form-control">{this.state.publish_date}</label>
                                     </div>
                                     <div className="form-group mb-3">
                                         <label>Description</label>
-                                        <textarea name="description" onChange={this.handleInput} value={this.state.description} className="form-control"/>
+                                        <label className="form-control">{this.state.description}</label>
                                     </div>
-                                    <div className="col text-center">
-                                        <button type="submit" className="btn btn-success"><i className="fas fa-save"></i> Update Feed</button>
-                                    </div>
-                                </form>
                             </div>
                         </div>
                     </div>
@@ -142,6 +94,6 @@ class EditFeed extends Component {
     }
 }
 
-export default EditFeed;
+export default ShowFeed;
 
 

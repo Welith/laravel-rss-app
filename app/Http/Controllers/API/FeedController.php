@@ -4,11 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
-use App\Models\Feed;
 use App\Repositories\Feed\FeedRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class FeedController extends Controller
@@ -44,10 +42,10 @@ class FeedController extends Controller
             ]);
         }
 
-        [$code, $message] = $this->feedRepository->create($request->all());
+        [$status, $message] = $this->feedRepository->create($request->all());
 
         return response()->json([
-            'status' => $code,
+            'status' => $status,
             'message' => $message
         ]);
     }
@@ -73,6 +71,14 @@ class FeedController extends Controller
     {
         $feed = $this->feedRepository->find($id);
 
+        if (!$feed) {
+
+            return response()->json([
+                'status' => 404,
+                'feed' => "Feed Not Found!"
+            ]);
+        }
+
         return response()->json([
             'status' => 200,
             'feed' => $feed
@@ -83,6 +89,7 @@ class FeedController extends Controller
      * @param Request $request
      * @param $id
      * @return JsonResponse
+     * @throws GeneralException
      */
     public function edit(Request $request, $id): JsonResponse
     {
@@ -103,21 +110,25 @@ class FeedController extends Controller
             ]);
         }
 
-        [$code, $message] = $this->feedRepository->update($id, $request->all());
+        [$status, $message] = $this->feedRepository->update($id, $request->all());
 
         return response()->json([
-            'status' => $code,
+            'status' => $status,
             'message' => $message
         ]);
     }
 
-    public function delete($id)
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
+    public function delete($id): JsonResponse
     {
-        $this->feedRepository->delete($id);
+        [$status, $message] = $this->feedRepository->delete($id);
 
         return response()->json([
-            "status" => 200,
-            "message" => 'Feed Deleted Successfully!'
+            "status" => $status,
+            "message" => $message
         ]);
     }
 

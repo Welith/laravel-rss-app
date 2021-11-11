@@ -20,17 +20,17 @@ class Feed extends Component {
 
     getUserData = async (pageNum = 1) => {
 
-        const resp = await axios.get(`/api/feeds/list?page=${pageNum}`);
+        const res = await axios.get(`/api/feeds/list?page=${pageNum}`);
 
-        if (resp.data.status === 200) {
+        if (res.data.status === 200) {
 
             this.setState({
 
-                feeds: resp.data.feeds.data,
+                feeds: res.data.feeds.data,
                 loading: false,
-                activePage: resp.data.feeds.current_page,
-                itemsCountPerPage: resp.data.feeds.per_page,
-                totalItemsCount: resp.data.feeds.total
+                activePage: res.data.feeds.current_page,
+                itemsCountPerPage: res.data.feeds.per_page,
+                totalItemsCount: res.data.feeds.total
             })
         }
     }
@@ -40,18 +40,26 @@ class Feed extends Component {
         const deleteButton = e.currentTarget;
         deleteButton.innerText = "Deleting";
 
-        const resp = await axios.delete(`/api/feeds/${id}/delete`);
+        const res = await axios.delete(`/api/feeds/${id}/delete`);
 
-        if (resp.data.status === 200) {
+        if (res.data.status === 200) {
 
             swal({
                 title: "Deleted!",
-                text: resp.data.message,
+                text: res.data.message,
                 icon: "success",
                 button: "OK",
             });
 
             deleteButton.closest("tr").remove()
+        } else {
+
+            swal({
+                title: "Error!",
+                text: res.data.message,
+                icon: "error",
+                button: "OK",
+            });
         }
     }
 
@@ -66,7 +74,7 @@ class Feed extends Component {
 
         if (this.state.loading) {
 
-            feed_HTML_TABLE = <tr><td colSpan="8">Loading ...</td></tr>
+            feed_HTML_TABLE = <tr><td colSpan="2">Loading ...</td></tr>
         } else {
 
             feed_HTML_TABLE = this.state.feeds.map((item) => {
@@ -75,23 +83,10 @@ class Feed extends Component {
                         <td>
                             {item.title}
                         </td>
-                        <td>
-                            {item.link}
-                        </td>
-                        <td>
-                            {item.source}
-                        </td>
-                        <td>
-                            {item.source_url}
-                        </td>
-                        <td>
-                            {item.publish_date}
-                        </td>
-                        <td>
-                            {item.description}
-                        </td>
-                        <td>
-                            <Link to={`/feeds/${item.id}`} className="btn btn-success btn-sm"><i className="fas fa-edit"></i></Link>
+                        <td className="w-auto d-flex justify-content-center">
+                            <Link to={`/feeds/${item.id}`} className="btn btn-primary btn-sm"><i className="fas fa-eye"></i></Link>
+                            &nbsp;
+                            <Link to={`/feeds/${item.id}/edit`} className="btn btn-success btn-sm"><i className="fas fa-edit"></i></Link>
                             &nbsp;
                             <Link onClick={(e) => this.deleteStudent(e, item.id)} className="btn btn-danger btn-sm"><i className="fas fa-trash-alt"></i></Link>
                         </td>
@@ -114,13 +109,8 @@ class Feed extends Component {
                                 <table className="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Title</th>
-                                            <th>Link</th>
-                                            <th>Source</th>
-                                            <th>Source URL</th>
-                                            <th>Publish Date</th>
-                                            <th>Description</th>
-                                            <th>Actions</th>
+                                            <th className="text-center">Title</th>
+                                            <th className="text-center w-auto">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>

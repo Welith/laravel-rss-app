@@ -15,7 +15,7 @@ class Feed extends Component {
         link: null,
         publish_date_from: null,
         publish_date_to: null,
-        urls: {"urls": ["https://www.geeksforgeeks.org/feed/", "https://www.theboltonnews.co.uk/news/rss/"]}
+        urls: {"urls": (process.env.MIX_RSS_FEED_ARRAY).split(",")}
 
     }
 

@@ -6,6 +6,7 @@ use App\Constants\RequestConstants;
 use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
 use App\Repositories\Feed\FeedRepository;
+use App\RequestManagers\AuthRequestManager;
 use App\RequestManagers\FeedRequestManager;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
@@ -18,10 +19,13 @@ class FeedController extends Controller
 
     private FeedRequestManager $feedRequestManager;
 
-    public function __construct(FeedRepository $feedRepository, FeedRequestManager $feedRequestManager)
+    private AuthRequestManager $authRequestManager;
+
+    public function __construct(FeedRepository $feedRepository, FeedRequestManager $feedRequestManager, AuthRequestManager $authRequestManager)
     {
         $this->feedRepository = $feedRepository;
         $this->feedRequestManager = $feedRequestManager;
+        $this->authRequestManager = $authRequestManager;
     }
 
     /**
@@ -101,9 +105,20 @@ class FeedController extends Controller
      * @throws GuzzleException
      * @throws \JsonException
      */
-    public function fetchFromGolang(Request $request)
+    public function fetchFromGolang(Request $request): JsonResponse
     {
-        $feeds = $this->feedRequestManager->getFeeds($request->all());
+        #Authenticaiton
+        $accessToken = $this->authRequestManager->login();
+
+        if (!$accessToken) {
+
+            return response()->json([
+                'status' => RequestConstants::STATUS_CODES["unauthorized"],
+                'message' => RequestConstants::RESPONSES['unauthorized']
+            ]);
+        }
+
+        $feeds = $this->feedRequestManager->getFeeds($request->all(), $accessToken);
 
         if (empty($feeds)) {
 
@@ -112,6 +127,9 @@ class FeedController extends Controller
                 'message' => RequestConstants::RESPONSES['not_found']
             ]);
         }
+
+        // For safety of JWT tokens
+        $this->authRequestManager->logout();
 
         foreach ($feeds as $feed) {
 

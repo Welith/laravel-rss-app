@@ -149,7 +149,6 @@ abstract class AbstractHttpRequest implements HttpRequestInterface
      * @param bool $json
      * @param array $options
      *
-     * @param bool $async
      * @return PromiseInterface|HttpException|void
      *
      * @throws GeneralException
@@ -182,8 +181,6 @@ abstract class AbstractHttpRequest implements HttpRequestInterface
         $this->_headers->flush();
 
         return $this->handle($response);
-
-
     }
 
     /**

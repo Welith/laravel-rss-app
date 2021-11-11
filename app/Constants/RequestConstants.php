@@ -12,7 +12,8 @@ abstract class RequestConstants
         "success" => 200,
         "not_found" => 404,
         "duplicate" => 422,
-        "validation" => 400
+        "validation" => 400,
+        "unauthorized" => 403
     ];
 
     public const RESPONSES = [
@@ -20,7 +21,8 @@ abstract class RequestConstants
         "updated" => "Model Updated Successfully!",
         "deleted" => "Model Deleted Successfully!",
         "not_found" => "Model Not Found!",
-        "duplicate" => "A Model With The Same Parameters Already Exists!"
+        "duplicate" => "A Model With The Same Parameters Already Exists!",
+        "unauthorized" => "Invalid login details"
     ];
 
     public const GET = 'GET';

@@ -18,7 +18,9 @@ class EditFeed extends Component {
     }
 
     handleInput = (e) => {
+
         this.setState({
+
             [e.target.name]: e.target.value
         });
     }

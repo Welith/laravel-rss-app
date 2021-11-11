@@ -6,6 +6,7 @@ use App\Exceptions\GeneralException;
 use App\Models\Feed;
 use App\Repositories\BaseRepository;
 use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -110,33 +111,33 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
 
     /**
      * @param array $filter
-     * @return array
+     * @return LengthAwarePaginator
      */
-    public function getFiltered(array $filter): array
+    public function getFiltered(array $filter): LengthAwarePaginator
     {
         $query = Feed::query();
 
         if (isset($filter['link'])) {
 
-            $query->where('link', "=", $filter['link']);
+            $query->where('link', "LIKE", "%{$filter['link']}%");
         }
 
         if (isset($filter['title'])) {
 
-            $query->where('title', "=", $filter['title']);
+            $query->where('title', "LIKE", "%{$filter['title']}%");
         }
 
         if (isset($filter['publish_date_from'])) {
 
-            $query->whereDate('publish_date', ">=", $filter['publish_date']);
+            $query->whereDate('publish_date', ">=", $filter['publish_date_from']);
         }
 
         if (isset($filter['publish_date_to'])) {
 
-            $query->whereDate('publish_date', "<=", $filter['publish_date']);
+            $query->whereDate('publish_date', "<=", $filter['publish_date_to']);
         }
 
-        return $query->get();
+        return $query->orderBy('created_at', 'DESC')->paginate();
     }
 
     /**

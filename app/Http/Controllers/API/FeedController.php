@@ -51,11 +51,14 @@ class FeedController extends Controller
     }
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $feeds = $this->feedRepository->paginate();
+        $filters = $request->query->all();
+
+        $feeds = $this->feedRepository->getFiltered($filters);
 
         return response()->json([
             'status' => 200,

@@ -41,7 +41,7 @@ class AddFeed extends Component {
 
                 window.location = '/';
             });
-        }  else if (res.data.stack === 400) {
+        }  else if (res.data.status === 400) {
 
             this.setState({
 

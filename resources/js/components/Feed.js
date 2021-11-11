@@ -10,7 +10,12 @@ class Feed extends Component {
         loading: true,
         activePage: 1,
         itemsCountPerPage: 1,
-        totalItemsCount: 1
+        totalItemsCount: 1,
+        title: null,
+        link: null,
+        publish_date_from: null,
+        publish_date_to: null
+
     }
 
     componentDidMount = async (pageNum = 1) => {
@@ -18,9 +23,24 @@ class Feed extends Component {
        await this.getUserData(pageNum)
     }
 
-    getUserData = async (pageNum = 1) => {
+    filter = async (e) => {
 
-        const res = await axios.get(`/api/feeds/list?page=${pageNum}`);
+        e.preventDefault()
+
+        await this.getUserData(this.state.activePage, this.state.link, this.state.title, this.state.publish_date_from, this.state.publish_date_to)
+    }
+
+    getUserData = async (pageNum = 1, link = null, title = null, publish_date_from = null, publish_date_to = null) => {
+
+        const res = await axios.get(`/api/feeds/list`, {
+            params: {
+                page: pageNum,
+                link: link,
+                title: title,
+                publish_date_from: publish_date_from,
+                publish_date_to: publish_date_to,
+            }
+        });
 
         if (res.data.status === 200) {
 
@@ -35,7 +55,17 @@ class Feed extends Component {
         }
     }
 
-    deleteStudent = async (e, id) => {
+    handleInput = (e) => {
+
+        this.setState({
+
+            [e.target.name]: e.target.value === "" ? null : e.target.value
+        });
+    }
+
+    deleteFeed = async (e, id) => {
+
+        e.preventDefault();
 
         const deleteButton = e.currentTarget;
         deleteButton.innerText = "Deleting";
@@ -80,7 +110,7 @@ class Feed extends Component {
             feed_HTML_TABLE = this.state.feeds.map((item) => {
                 return (
                     <tr key={item.id}>
-                        <td>
+                        <td className="w-100">
                             {item.title}
                         </td>
                         <td className="w-auto d-flex justify-content-center">
@@ -88,7 +118,7 @@ class Feed extends Component {
                             &nbsp;
                             <Link to={`/feeds/${item.id}/edit`} className="btn btn-success btn-sm"><i className="fas fa-edit"></i></Link>
                             &nbsp;
-                            <Link onClick={(e) => this.deleteStudent(e, item.id)} className="btn btn-danger btn-sm"><i className="fas fa-trash-alt"></i></Link>
+                            <Link onClick={(e) => this.deleteFeed(e, item.id)} className="btn btn-danger btn-sm"><i className="fas fa-trash-alt"></i></Link>
                         </td>
                     </tr>
                 );
@@ -105,12 +135,28 @@ class Feed extends Component {
                                     <Link to={'/feeds'} className="btn btn-primary btn-sm float-right"><i className="fas fa-plus-square"></i> Add Feed</Link>
                                 </h4>
                             </div>
+                            <div className="card-header align-items-center justify-content-center">
+                                <form className="form-inline" onSubmit={this.filter}>
+                                    <input type="text" name="title" className="form-control m-1" value={this.state.title} onChange={this.handleInput} placeholder="Title..."/>
+
+                                    <input type="text" className="form-control m-1" name="link" value={this.state.link} onChange={this.handleInput}  placeholder="RSS Feed..."/>
+
+                                    <label htmlFor="publish_date_from" className="m-1">Date From:</label>
+                                    <input type="datetime-local" className="form-control m-1" value={this.state.publish_date_from} onChange={this.handleInput} name="publish_date_from" id="publish_date_from"/>
+
+                                    <label htmlFor="publish_date_to" className="m-1">Date To:</label>
+                                    <input type="datetime-local" className="form-control m-1" value={this.state.publish_date_to} name="publish_date_to" id="publish_date_to"/>
+
+                                    <button type="submit" className="btn btn-primary btn-sm float-right">Filter</button>
+
+                                </form>
+                            </div>
                             <div className="card-body">
                                 <table className="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th className="text-center">Title</th>
-                                            <th className="text-center w-auto">Actions</th>
+                                            <th className="text-center w-100">Title</th>
+                                            <th className="text-center">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>

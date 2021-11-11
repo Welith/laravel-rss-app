@@ -2239,7 +2239,7 @@ var AddFeed = /*#__PURE__*/function (_Component) {
                   }).then(function () {
                     window.location = '/';
                   });
-                } else if (res.data.stack === 400) {
+                } else if (res.data.status === 400) {
                   _this.setState({
                     error_list: res.data.message
                   });
@@ -2857,7 +2857,11 @@ var Feed = /*#__PURE__*/function (_Component) {
       loading: true,
       activePage: 1,
       itemsCountPerPage: 1,
-      totalItemsCount: 1
+      totalItemsCount: 1,
+      title: null,
+      link: null,
+      publish_date_from: null,
+      publish_date_to: null
     });
 
     _defineProperty(_assertThisInitialized(_this), "componentDidMount", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
@@ -2879,20 +2883,59 @@ var Feed = /*#__PURE__*/function (_Component) {
       }, _callee);
     })));
 
-    _defineProperty(_assertThisInitialized(_this), "getUserData", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-      var pageNum,
-          res,
-          _args2 = arguments;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              pageNum = _args2.length > 0 && _args2[0] !== undefined ? _args2[0] : 1;
-              _context2.next = 3;
-              return axios.get("/api/feeds/list?page=".concat(pageNum));
+    _defineProperty(_assertThisInitialized(_this), "filter", /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(e) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                e.preventDefault();
+                _context2.next = 3;
+                return _this.getUserData(_this.state.activePage, _this.state.link, _this.state.title, _this.state.publish_date_from, _this.state.publish_date_to);
 
-            case 3:
-              res = _context2.sent;
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }));
+
+      return function (_x) {
+        return _ref2.apply(this, arguments);
+      };
+    }());
+
+    _defineProperty(_assertThisInitialized(_this), "getUserData", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+      var pageNum,
+          link,
+          title,
+          publish_date_from,
+          publish_date_to,
+          res,
+          _args3 = arguments;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              pageNum = _args3.length > 0 && _args3[0] !== undefined ? _args3[0] : 1;
+              link = _args3.length > 1 && _args3[1] !== undefined ? _args3[1] : null;
+              title = _args3.length > 2 && _args3[2] !== undefined ? _args3[2] : null;
+              publish_date_from = _args3.length > 3 && _args3[3] !== undefined ? _args3[3] : null;
+              publish_date_to = _args3.length > 4 && _args3[4] !== undefined ? _args3[4] : null;
+              _context3.next = 7;
+              return axios.get("/api/feeds/list", {
+                params: {
+                  page: pageNum,
+                  link: link,
+                  title: title,
+                  publish_date_from: publish_date_from,
+                  publish_date_to: publish_date_to
+                }
+              });
+
+            case 7:
+              res = _context3.sent;
 
               if (res.data.status === 200) {
                 _this.setState({
@@ -2904,28 +2947,33 @@ var Feed = /*#__PURE__*/function (_Component) {
                 });
               }
 
-            case 5:
+            case 9:
             case "end":
-              return _context2.stop();
+              return _context3.stop();
           }
         }
-      }, _callee2);
+      }, _callee3);
     })));
 
-    _defineProperty(_assertThisInitialized(_this), "deleteStudent", /*#__PURE__*/function () {
-      var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(e, id) {
+    _defineProperty(_assertThisInitialized(_this), "handleInput", function (e) {
+      _this.setState(_defineProperty({}, e.target.name, e.target.value === "" ? null : e.target.value));
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "deleteFeed", /*#__PURE__*/function () {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(e, id) {
         var deleteButton, res;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context4.prev = _context4.next) {
               case 0:
+                e.preventDefault();
                 deleteButton = e.currentTarget;
                 deleteButton.innerText = "Deleting";
-                _context3.next = 4;
+                _context4.next = 5;
                 return axios["delete"]("/api/feeds/".concat(id, "/delete"));
 
-              case 4:
-                res = _context3.sent;
+              case 5:
+                res = _context4.sent;
 
                 if (res.data.status === 200) {
                   sweetalert__WEBPACK_IMPORTED_MODULE_2___default()({
@@ -2944,16 +2992,16 @@ var Feed = /*#__PURE__*/function (_Component) {
                   });
                 }
 
-              case 6:
+              case 7:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
           }
-        }, _callee3);
+        }, _callee4);
       }));
 
-      return function (_x, _x2) {
-        return _ref3.apply(this, arguments);
+      return function (_x2, _x3) {
+        return _ref4.apply(this, arguments);
       };
     }());
 
@@ -2963,23 +3011,23 @@ var Feed = /*#__PURE__*/function (_Component) {
   _createClass(Feed, [{
     key: "handlePageChange",
     value: function () {
-      var _handlePageChange = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(pageNumber) {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+      var _handlePageChange = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(pageNumber) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
-                _context4.next = 2;
+                _context5.next = 2;
                 return this.getUserData(pageNumber);
 
               case 2:
               case "end":
-                return _context4.stop();
+                return _context5.stop();
             }
           }
-        }, _callee4, this);
+        }, _callee5, this);
       }));
 
-      function handlePageChange(_x3) {
+      function handlePageChange(_x4) {
         return _handlePageChange.apply(this, arguments);
       }
 
@@ -3003,6 +3051,7 @@ var Feed = /*#__PURE__*/function (_Component) {
         feed_HTML_TABLE = this.state.feeds.map(function (item) {
           return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+              className: "w-100",
               children: item.title
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("td", {
               className: "w-auto d-flex justify-content-center",
@@ -3020,7 +3069,7 @@ var Feed = /*#__PURE__*/function (_Component) {
                 })
               }), "\xA0", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Link, {
                 onClick: function onClick(e) {
-                  return _this2.deleteStudent(e, item.id);
+                  return _this2.deleteFeed(e, item.id);
                 },
                 className: "btn btn-danger btn-sm",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
@@ -3052,6 +3101,52 @@ var Feed = /*#__PURE__*/function (_Component) {
                     }), " Add Feed"]
                   })]
                 })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                className: "card-header align-items-center justify-content-center",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("form", {
+                  className: "form-inline",
+                  onSubmit: this.filter,
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+                    type: "text",
+                    name: "title",
+                    className: "form-control m-1",
+                    value: this.state.title,
+                    onChange: this.handleInput,
+                    placeholder: "Title..."
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+                    type: "text",
+                    className: "form-control m-1",
+                    name: "link",
+                    value: this.state.link,
+                    onChange: this.handleInput,
+                    placeholder: "RSS Feed..."
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+                    htmlFor: "publish_date_from",
+                    className: "m-1",
+                    children: "Date From:"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+                    type: "datetime-local",
+                    className: "form-control m-1",
+                    value: this.state.publish_date_from,
+                    onChange: this.handleInput,
+                    name: "publish_date_from",
+                    id: "publish_date_from"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+                    htmlFor: "publish_date_to",
+                    className: "m-1",
+                    children: "Date To:"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+                    type: "datetime-local",
+                    className: "form-control m-1",
+                    value: this.state.publish_date_to,
+                    name: "publish_date_to",
+                    id: "publish_date_to"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+                    type: "submit",
+                    className: "btn btn-primary btn-sm float-right",
+                    children: "Filter"
+                  })]
+                })
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
                 className: "card-body",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
@@ -3059,10 +3154,10 @@ var Feed = /*#__PURE__*/function (_Component) {
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("thead", {
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
                       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
-                        className: "text-center",
+                        className: "text-center w-100",
                         children: "Title"
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
-                        className: "text-center w-auto",
+                        className: "text-center",
                         children: "Actions"
                       })]
                     })

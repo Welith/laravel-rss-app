@@ -40,15 +40,15 @@ class AuthRequestManager extends AbstractHttpRequest
     }
 
     /**
-     * @param array $data
+     * @param string $token
      * @return mixed
      * @throws GeneralException
      * @throws GuzzleException
      * @throws \JsonException
      */
-    public function logout(array $data): mixed
+    public function logout(string $token): mixed
     {
-        $this->_headers->add('Authorization', "Bearer " . $this->login($data));
+        $this->_headers->add('Authorization', "Bearer " . $token);
         return $this->post('/logout');
     }
 
@@ -93,6 +93,8 @@ class AuthRequestManager extends AbstractHttpRequest
 
                 return null;
             }
+
+            return null;
         }
 
         $this->_headers->flush();

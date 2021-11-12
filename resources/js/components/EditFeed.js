@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Link} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import swal from "sweetalert";
 
 class EditFeed extends Component {
@@ -69,7 +69,7 @@ class EditFeed extends Component {
                 button: "OK",
             }).then(function () {
 
-                window.location = '/';
+                window.location = "/"
             });
         } else if (res.data.status === 400) {
 
@@ -97,7 +97,7 @@ class EditFeed extends Component {
                         <div className="card">
                             <div className="card-header text-center">
                                 <h4>Edit Feed
-                                    <Link to={'/'} className="btn btn-primary btn-sm float-right"><i className="fas fa-long-arrow-alt-left"></i> Back</Link>
+                                    <Link to={{pathname: '/', state: this.props.location.state}} className="btn btn-primary btn-sm float-right"><i className="fas fa-long-arrow-alt-left"></i> Back</Link>
                                 </h4>
                             </div>
                             <div className="card-body">

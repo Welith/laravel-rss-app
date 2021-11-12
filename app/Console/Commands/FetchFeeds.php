@@ -43,7 +43,7 @@ class FetchFeeds extends Command
      */
     public function handle(): int
     {
-        $this->queueService->dispatch(explode(",", getenv("RSS_FEED_ARRAY")), 'rss', 'rss');
+        $this->queueService->dispatch(explode(",", getenv("RSS_FEED_ARRAY")), getenv("QUEUE_NAME"), getenv("QUEUE_NAME"));
 
         return CommandAlias::SUCCESS;
     }

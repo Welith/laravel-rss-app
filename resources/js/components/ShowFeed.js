@@ -59,7 +59,7 @@ class ShowFeed extends Component {
                         <div className="card">
                             <div className="card-header text-center">
                                 <h4>Feed # {this.feed_id}
-                                    <Link to={'/'} className="btn btn-primary btn-sm float-right"><i className="fas fa-long-arrow-alt-left"></i> Back</Link>
+                                    <Link to={{pathname: '/', state: this.props.location.state}} className="btn btn-primary btn-sm float-right"><i className="fas fa-long-arrow-alt-left"></i> Back</Link>
                                 </h4>
                             </div>
                             <div className="card-body">

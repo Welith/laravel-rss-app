@@ -143,7 +143,7 @@ class FeedController extends Controller
         }
 
         // For safety of JWT tokens
-        $this->authRequestManager->logout($request->all());
+        $this->authRequestManager->logout($accessToken);
 
         foreach ($feeds as $feed) {
 

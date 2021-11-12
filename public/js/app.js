@@ -2283,7 +2283,10 @@ var AddFeed = /*#__PURE__*/function (_Component) {
                 className: "card-header text-center",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("h4", {
                   children: ["Add Feed", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Link, {
-                    to: '/',
+                    to: {
+                      pathname: '/',
+                      state: this.props.location.state
+                    },
                     className: "btn btn-primary btn-sm float-right",
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
                       className: "fas fa-long-arrow-alt-left"
@@ -2569,7 +2572,7 @@ var EditFeed = /*#__PURE__*/function (_Component) {
                     icon: "success",
                     button: "OK"
                   }).then(function () {
-                    window.location = '/';
+                    window.location = "/";
                   });
                 } else if (res.data.status === 400) {
                   _this.setState({
@@ -2663,7 +2666,10 @@ var EditFeed = /*#__PURE__*/function (_Component) {
                 className: "card-header text-center",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("h4", {
                   children: ["Edit Feed", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Link, {
-                    to: '/',
+                    to: {
+                      pathname: '/',
+                      state: this.props.location.state
+                    },
                     className: "btn btn-primary btn-sm float-right",
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
                       className: "fas fa-long-arrow-alt-left"
@@ -2853,32 +2859,29 @@ var Feed = /*#__PURE__*/function (_Component) {
     _this = _super.call.apply(_super, [this].concat(args));
 
     _defineProperty(_assertThisInitialized(_this), "state", {
-      feeds: [],
-      loading: true,
-      activePage: 1,
-      itemsCountPerPage: 1,
-      totalItemsCount: 1,
-      title: null,
-      link: null,
-      publish_date_from: null,
-      publish_date_to: null,
+      feeds: typeof _this.props.location.state !== "undefined" ? _this.props.location.state.feeds : [],
+      loading: typeof _this.props.location.state !== "undefined" ? _this.props.location.state.loading : true,
+      activePage: typeof _this.props.location.state !== "undefined" ? _this.props.location.state.activePage : 1,
+      itemsCountPerPage: typeof _this.props.location.state !== "undefined" ? _this.props.location.state.itemsCountPerPage : 1,
+      totalItemsCount: typeof _this.props.location.state !== "undefined" ? _this.props.location.state.totalItemsCount : 1,
+      title: typeof _this.props.location.state !== "undefined" ? _this.props.location.state.title : null,
+      link: typeof _this.props.location.state !== "undefined" ? _this.props.location.state.link : null,
+      publish_date_from: typeof _this.props.location.state !== "undefined" ? _this.props.location.state.publish_date_from : null,
+      publish_date_to: typeof _this.props.location.state !== "undefined" ? _this.props.location.state.publish_date_to : null,
       urls: "https://www.geeksforgeeks.org/feed/,https://www.theboltonnews.co.uk/news/rss/".split(","),
       username: "emerchantpay",
       password: "password"
     });
 
     _defineProperty(_assertThisInitialized(_this), "componentDidMount", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      var pageNum,
-          _args = arguments;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              pageNum = _args.length > 0 && _args[0] !== undefined ? _args[0] : 1;
-              _context.next = 3;
-              return _this.getUserData(pageNum);
+              _context.next = 2;
+              return _this.getUserData(_this.state.activePage, _this.state.link, _this.state.title, _this.state.publish_date_from, _this.state.publish_date_to);
 
-            case 3:
+            case 2:
             case "end":
               return _context.stop();
           }
@@ -3113,13 +3116,19 @@ var Feed = /*#__PURE__*/function (_Component) {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("td", {
               className: "w-auto d-flex justify-content-center",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Link, {
-                to: "/feeds/".concat(item.id),
+                to: {
+                  pathname: "/feeds/".concat(item.id),
+                  state: _this2.state
+                },
                 className: "btn btn-primary btn-sm",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
                   className: "fas fa-eye"
                 })
               }), "\xA0", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Link, {
-                to: "/feeds/".concat(item.id, "/edit"),
+                to: {
+                  pathname: "/feeds/".concat(item.id, "/edit"),
+                  state: _this2.state
+                },
                 className: "btn btn-success btn-sm",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
                   className: "fas fa-edit"
@@ -3151,7 +3160,10 @@ var Feed = /*#__PURE__*/function (_Component) {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h4", {
                   className: "text-center",
                   children: ["RSS Feed Preview", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Link, {
-                    to: '/feeds',
+                    to: {
+                      pathname: '/feeds',
+                      state: this.state
+                    },
                     className: "btn btn-primary btn-sm float-right",
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
                       className: "fas fa-plus-square"
@@ -3407,7 +3419,10 @@ var ShowFeed = /*#__PURE__*/function (_Component) {
                 className: "card-header text-center",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("h4", {
                   children: ["Feed # ", this.feed_id, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Link, {
-                    to: '/',
+                    to: {
+                      pathname: '/',
+                      state: this.props.location.state
+                    },
                     className: "btn btn-primary btn-sm float-right",
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
                       className: "fas fa-long-arrow-alt-left"

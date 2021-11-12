@@ -6,24 +6,24 @@ import Pagination from "react-js-pagination";
 class Feed extends Component {
 
     state = {
-        feeds: [],
-        loading: true,
-        activePage: 1,
-        itemsCountPerPage: 1,
-        totalItemsCount: 1,
-        title: null,
-        link: null,
-        publish_date_from: null,
-        publish_date_to: null,
+        feeds: typeof this.props.location.state !== "undefined" ? this.props.location.state.feeds : [],
+        loading: typeof this.props.location.state !== "undefined" ? this.props.location.state.loading : true,
+        activePage: typeof this.props.location.state !== "undefined" ? this.props.location.state.activePage : 1,
+        itemsCountPerPage: typeof this.props.location.state !== "undefined" ? this.props.location.state.itemsCountPerPage : 1,
+        totalItemsCount: typeof this.props.location.state !== "undefined" ? this.props.location.state.totalItemsCount : 1,
+        title: typeof this.props.location.state !== "undefined" ? this.props.location.state.title : null,
+        link: typeof this.props.location.state !== "undefined" ? this.props.location.state.link : null,
+        publish_date_from: typeof this.props.location.state !== "undefined" ? this.props.location.state.publish_date_from : null,
+        publish_date_to: typeof this.props.location.state !== "undefined" ? this.props.location.state.publish_date_to : null,
         urls: (process.env.MIX_RSS_FEED_ARRAY).split(","),
         username: process.env.MIX_GOLANG_USERNAME,
         password: process.env.MIX_GOLANG_PASSWORD
 
     }
 
-    componentDidMount = async (pageNum = 1) => {
+    componentDidMount = async () => {
 
-       await this.getUserData(pageNum)
+        await this.getUserData(this.state.activePage, this.state.link, this.state.title, this.state.publish_date_from, this.state.publish_date_to)
     }
 
     filter = async (e) => {
@@ -147,9 +147,9 @@ class Feed extends Component {
                             {item.title}
                         </td>
                         <td className="w-auto d-flex justify-content-center">
-                            <Link to={`/feeds/${item.id}`} className="btn btn-primary btn-sm"><i className="fas fa-eye"></i></Link>
+                            <Link to={{pathname: `/feeds/${item.id}`, state: this.state}} className="btn btn-primary btn-sm"><i className="fas fa-eye"></i></Link>
                             &nbsp;
-                            <Link to={`/feeds/${item.id}/edit`} className="btn btn-success btn-sm"><i className="fas fa-edit"></i></Link>
+                            <Link to={{pathname: `/feeds/${item.id}/edit`, state: this.state}} className="btn btn-success btn-sm"><i className="fas fa-edit"></i></Link>
                             &nbsp;
                             <Link onClick={(e) => this.deleteFeed(e, item.id)} className="btn btn-danger btn-sm"><i className="fas fa-trash-alt"></i></Link>
                         </td>
@@ -165,7 +165,7 @@ class Feed extends Component {
                         <div className="card">
                             <div className="card-header">
                                 <h4 className="text-center">RSS Feed Preview
-                                    <Link to={'/feeds'} className="btn btn-primary btn-sm float-right"><i className="fas fa-plus-square"></i> Add Feed</Link>
+                                    <Link to={{pathname: '/feeds', state: this.state}} className="btn btn-primary btn-sm float-right"><i className="fas fa-plus-square"></i> Add Feed</Link>
                                     <button onClick={ (e) => this.fetchFeeds(e)} className="btn btn-primary btn-sm float-left"><i className="fas fa-plus-square"></i> Fetch Feeds</button>
                                 </h4>
                             </div>

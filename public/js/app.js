@@ -2870,7 +2870,9 @@ var Feed = /*#__PURE__*/function (_Component) {
       publish_date_to: typeof _this.props.location.state !== "undefined" ? _this.props.location.state.publish_date_to : null,
       urls: "https://www.geeksforgeeks.org/feed/,https://www.theboltonnews.co.uk/news/rss/".split(","),
       username: "emerchantpay",
-      password: "password"
+      password: "password",
+      tmp_id: null,
+      tmp_button: null
     });
 
     _defineProperty(_assertThisInitialized(_this), "componentDidMount", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
@@ -2966,44 +2968,83 @@ var Feed = /*#__PURE__*/function (_Component) {
     });
 
     _defineProperty(_assertThisInitialized(_this), "deleteFeed", /*#__PURE__*/function () {
-      var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(e, id) {
-        var deleteButton, res;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(e, id) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
+                _this.state.tmp_id = id;
+                _this.state.tmp_button = e.currentTarget;
+                console.log(_this.state.tmp_button);
                 e.preventDefault();
-                deleteButton = e.currentTarget;
-                deleteButton.innerText = "Deleting";
-                _context4.next = 5;
-                return axios["delete"]("/api/feeds/".concat(id, "/delete"));
+                sweetalert__WEBPACK_IMPORTED_MODULE_2___default()({
+                  title: "Are you sure?",
+                  text: "Once deleted, you will not be able to recover this feed!",
+                  icon: "warning",
+                  buttons: true,
+                  dangerMode: true
+                }).then( /*#__PURE__*/function () {
+                  var _ref5 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(willDelete) {
+                    var deleteButton, res;
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+                      while (1) {
+                        switch (_context4.prev = _context4.next) {
+                          case 0:
+                            if (!willDelete) {
+                              _context4.next = 9;
+                              break;
+                            }
+
+                            deleteButton = _this.state.tmp_button;
+                            deleteButton.innerText = "Deleting...";
+                            _context4.next = 5;
+                            return axios["delete"]("/api/feeds/".concat(_this.state.tmp_id, "/delete"));
+
+                          case 5:
+                            res = _context4.sent;
+
+                            if (res.data.status === 200) {
+                              sweetalert__WEBPACK_IMPORTED_MODULE_2___default()({
+                                title: "Deleted!",
+                                text: res.data.message,
+                                icon: "success",
+                                button: "OK"
+                              });
+                              deleteButton.closest("tr").remove();
+                            } else {
+                              sweetalert__WEBPACK_IMPORTED_MODULE_2___default()({
+                                title: "Error!",
+                                text: res.data.message,
+                                icon: "error",
+                                button: "OK"
+                              });
+                            }
+
+                            _context4.next = 10;
+                            break;
+
+                          case 9:
+                            sweetalert__WEBPACK_IMPORTED_MODULE_2___default().close();
+
+                          case 10:
+                          case "end":
+                            return _context4.stop();
+                        }
+                      }
+                    }, _callee4);
+                  }));
+
+                  return function (_x4) {
+                    return _ref5.apply(this, arguments);
+                  };
+                }());
 
               case 5:
-                res = _context4.sent;
-
-                if (res.data.status === 200) {
-                  sweetalert__WEBPACK_IMPORTED_MODULE_2___default()({
-                    title: "Deleted!",
-                    text: res.data.message,
-                    icon: "success",
-                    button: "OK"
-                  });
-                  deleteButton.closest("tr").remove();
-                } else {
-                  sweetalert__WEBPACK_IMPORTED_MODULE_2___default()({
-                    title: "Error!",
-                    text: res.data.message,
-                    icon: "error",
-                    button: "OK"
-                  });
-                }
-
-              case 7:
               case "end":
-                return _context4.stop();
+                return _context5.stop();
             }
           }
-        }, _callee4);
+        }, _callee5);
       }));
 
       return function (_x2, _x3) {
@@ -3017,11 +3058,11 @@ var Feed = /*#__PURE__*/function (_Component) {
   _createClass(Feed, [{
     key: "fetchFeeds",
     value: function () {
-      var _fetchFeeds = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(e) {
+      var _fetchFeeds = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6(e) {
         var data, res;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
           while (1) {
-            switch (_context5.prev = _context5.next) {
+            switch (_context6.prev = _context6.next) {
               case 0:
                 e.preventDefault();
                 data = {
@@ -3029,11 +3070,11 @@ var Feed = /*#__PURE__*/function (_Component) {
                   username: this.state.username,
                   password: this.state.password
                 };
-                _context5.next = 4;
+                _context6.next = 4;
                 return axios.post("/api/feeds/fetch-go", data);
 
               case 4:
-                res = _context5.sent;
+                res = _context6.sent;
                 console.log(res);
 
                 if (res.data.status === 200) {
@@ -3056,13 +3097,13 @@ var Feed = /*#__PURE__*/function (_Component) {
 
               case 7:
               case "end":
-                return _context5.stop();
+                return _context6.stop();
             }
           }
-        }, _callee5, this);
+        }, _callee6, this);
       }));
 
-      function fetchFeeds(_x4) {
+      function fetchFeeds(_x5) {
         return _fetchFeeds.apply(this, arguments);
       }
 
@@ -3071,40 +3112,69 @@ var Feed = /*#__PURE__*/function (_Component) {
   }, {
     key: "handlePageChange",
     value: function () {
-      var _handlePageChange = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6(pageNumber) {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+      var _handlePageChange = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7(pageNumber) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
           while (1) {
-            switch (_context6.prev = _context6.next) {
+            switch (_context7.prev = _context7.next) {
               case 0:
-                _context6.next = 2;
+                _context7.next = 2;
                 return this.getUserData(pageNumber, this.state.link, this.state.title, this.state.publish_date_from, this.state.publish_date_to);
 
               case 2:
               case "end":
-                return _context6.stop();
+                return _context7.stop();
             }
           }
-        }, _callee6, this);
+        }, _callee7, this);
       }));
 
-      function handlePageChange(_x5) {
+      function handlePageChange(_x6) {
         return _handlePageChange.apply(this, arguments);
       }
 
       return handlePageChange;
     }()
   }, {
+    key: "renderHTMLTable",
+    value: function renderHTMLTable(data) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
+        className: "table table-bordered table-striped",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("thead", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+              className: "text-center w-100",
+              children: "Title"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+              className: "text-center",
+              children: "Actions"
+            })]
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tbody", {
+          children: data
+        })]
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this2 = this;
 
       var feed_HTML_TABLE;
+      console.log(this.state);
 
       if (this.state.loading) {
         feed_HTML_TABLE = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tr", {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
             colSpan: "2",
             children: "Loading ..."
+          })
+        });
+      } else if (this.state.feeds.length === 0) {
+        feed_HTML_TABLE = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tr", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+            colSpan: "2",
+            className: "w-auto d-flex justify-content-center",
+            children: "No data available. Press 'Fetch' to get latest supported feeds."
           })
         });
       } else {
@@ -3227,22 +3297,7 @@ var Feed = /*#__PURE__*/function (_Component) {
                 })
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
                 className: "card-body",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
-                  className: "table table-bordered table-striped",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("thead", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
-                        className: "text-center w-100",
-                        children: "Title"
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
-                        className: "text-center",
-                        children: "Actions"
-                      })]
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tbody", {
-                    children: feed_HTML_TABLE
-                  })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                children: [this.renderHTMLTable(feed_HTML_TABLE), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                   className: "d-flex justify-content-center",
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_js_pagination__WEBPACK_IMPORTED_MODULE_3__["default"], {
                     activePage: this.state.activePage,

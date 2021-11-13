@@ -52,7 +52,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      */
     public function paginate(int $items = 20)
     {
-        return $this->model->orderBy('created_at', 'DESC')->paginate($items);
+        return $this->model->orderBy('publish_date', 'DESC')->paginate($items);
     }
 
     /**

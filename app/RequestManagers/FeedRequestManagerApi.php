@@ -3,13 +3,13 @@
 namespace App\RequestManagers;
 
 use App\Exceptions\GeneralException;
-use App\Requests\AbstractHttpRequest;
+use App\Requests\AbstractApiHttpRequest;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use HttpException;
 use Psr\Http\Message\ResponseInterface;
 
-class FeedRequestManager extends AbstractHttpRequest
+class FeedRequestManagerApi extends AbstractApiHttpRequest
 {
 
     public const SERVICE = "GOLANG_SERVICE";

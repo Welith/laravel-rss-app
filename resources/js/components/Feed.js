@@ -17,7 +17,9 @@ class Feed extends Component {
         publish_date_to: typeof this.props.location.state !== "undefined" ? this.props.location.state.publish_date_to : null,
         urls: (process.env.MIX_RSS_FEED_ARRAY).split(","),
         username: process.env.MIX_GOLANG_USERNAME,
-        password: process.env.MIX_GOLANG_PASSWORD
+        password: process.env.MIX_GOLANG_PASSWORD,
+        tmp_id: null,
+        tmp_button: null
 
     }
 
@@ -68,32 +70,49 @@ class Feed extends Component {
 
     deleteFeed = async (e, id) => {
 
+        this.state.tmp_id = id
+        this.state.tmp_button = e.currentTarget
+        console.log(this.state.tmp_button)
+
         e.preventDefault();
 
-        const deleteButton = e.currentTarget;
-        deleteButton.innerText = "Deleting";
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this feed!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then(async (willDelete) => {
+                if (willDelete) {
+                    const deleteButton = this.state.tmp_button;
+                    deleteButton.innerText = "Deleting...";
 
-        const res = await axios.delete(`/api/feeds/${id}/delete`);
+                    const res = await axios.delete(`/api/feeds/${this.state.tmp_id}/delete`);
 
-        if (res.data.status === 200) {
+                    if (res.data.status === 200) {
 
-            swal({
-                title: "Deleted!",
-                text: res.data.message,
-                icon: "success",
-                button: "OK",
+                        swal({
+                            title: "Deleted!",
+                            text: res.data.message,
+                            icon: "success",
+                            button: "OK",
+                        });
+
+                        deleteButton.closest("tr").remove()
+                    } else {
+
+                        swal({
+                            title: "Error!",
+                            text: res.data.message,
+                            icon: "error",
+                            button: "OK",
+                        });
+                    }
+                } else {
+                    swal.close()
+                }
             });
-
-            deleteButton.closest("tr").remove()
-        } else {
-
-            swal({
-                title: "Error!",
-                text: res.data.message,
-                icon: "error",
-                button: "OK",
-            });
-        }
     }
 
     async fetchFeeds(e) {
@@ -131,13 +150,34 @@ class Feed extends Component {
         await this.getUserData(pageNumber, this.state.link, this.state.title, this.state.publish_date_from, this.state.publish_date_to)
     }
 
+    renderHTMLTable (data) {
+
+        return (
+            <table className="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th className="text-center w-100">Title</th>
+                    <th className="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {data}
+                </tbody>
+            </table>
+        )
+    }
+
     render() {
 
         let feed_HTML_TABLE;
 
+        console.log(this.state)
         if (this.state.loading) {
 
             feed_HTML_TABLE = <tr><td colSpan="2">Loading ...</td></tr>
+        } else if (this.state.feeds.length === 0) {
+
+            feed_HTML_TABLE = <tr><td colSpan="2" className="w-auto d-flex justify-content-center">No data available. Press 'Fetch' to get latest supported feeds.</td></tr>
         } else {
 
             feed_HTML_TABLE = this.state.feeds.map((item) => {
@@ -186,17 +226,7 @@ class Feed extends Component {
                                 </form>
                             </div>
                             <div className="card-body">
-                                <table className="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th className="text-center w-100">Title</th>
-                                            <th className="text-center">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {feed_HTML_TABLE}
-                                    </tbody>
-                                </table>
+                                {this.renderHTMLTable(feed_HTML_TABLE)}
                                 <div className="d-flex justify-content-center">
                                     <Pagination
                                         activePage={this.state.activePage}

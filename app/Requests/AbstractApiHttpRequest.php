@@ -16,12 +16,12 @@ use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
- * Class AbstractHttpRequest
+ * Class AbstractApiHttpRequest
  * @package Paynetics\HttpRequest
  *
  * @property HeadersBag headers
  */
-abstract class AbstractHttpRequest implements HttpRequestInterface
+abstract class AbstractApiHttpRequest implements HttpRequestInterface
 {
 
     /**

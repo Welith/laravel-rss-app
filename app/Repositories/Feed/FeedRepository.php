@@ -36,7 +36,7 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
             $this->model->create($attributes);
 
         } catch (Exception $exception) {
-            dd($exception);
+
             DB::rollBack();
             throw new GeneralException($exception->getMessage());
         }
@@ -137,7 +137,7 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
             $query->whereDate('publish_date', "<=", $filter['publish_date_to']);
         }
 
-        return $query->orderBy('created_at', 'DESC')->paginate();
+        return $query->orderBy('publish_date', 'DESC')->paginate();
     }
 
     /**

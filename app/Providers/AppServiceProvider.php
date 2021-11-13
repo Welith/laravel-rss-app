@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use App\Repositories\Feed\FeedRepository;
 use App\Repositories\Feed\FeedRepositoryInterface;
-use App\RequestManagers\FeedRequestManager;
-use App\Requests\AbstractHttpRequest;
+use App\RequestManagers\FeedRequestManagerApi;
+use App\Requests\AbstractApiHttpRequest;
 use App\Requests\HttpRequestInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;

@@ -17,11 +17,11 @@ abstract class RequestConstants
     ];
 
     public const RESPONSES = [
-        "created" => "Model Created Successfully!",
-        "updated" => "Model Updated Successfully!",
-        "deleted" => "Model Deleted Successfully!",
-        "not_found" => "Model Not Found!",
-        "duplicate" => "A Model With The Same Parameters Already Exists!",
+        "created" => "Item Created Successfully!",
+        "updated" => "Item Updated Successfully!",
+        "deleted" => "Item Deleted Successfully!",
+        "not_found" => "Item Not Found!",
+        "duplicate" => "An Item With The Same Parameters Already Exists!",
         "unauthorized" => "Invalid login details"
     ];
 

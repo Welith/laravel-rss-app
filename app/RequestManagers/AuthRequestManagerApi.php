@@ -4,7 +4,7 @@ namespace App\RequestManagers;
 
 use App\Exceptions\GeneralException;
 use App\Helper\URLParser;
-use App\Requests\AbstractHttpRequest;
+use App\Requests\AbstractApiHttpRequest;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -12,7 +12,7 @@ use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class AuthRequestManager extends AbstractHttpRequest
+class AuthRequestManagerApi extends AbstractApiHttpRequest
 {
     public const SERVICE = "GOLANG_SERVICE";
 

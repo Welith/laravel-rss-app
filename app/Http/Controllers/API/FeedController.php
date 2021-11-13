@@ -6,8 +6,8 @@ use App\Constants\RequestConstants;
 use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
 use App\Repositories\Feed\FeedRepository;
-use App\RequestManagers\AuthRequestManager;
-use App\RequestManagers\FeedRequestManager;
+use App\RequestManagers\AuthRequestManagerApi;
+use App\RequestManagers\FeedRequestManagerApi;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,11 +17,11 @@ class FeedController extends Controller
 {
     private FeedRepository $feedRepository;
 
-    private FeedRequestManager $feedRequestManager;
+    private FeedRequestManagerApi $feedRequestManager;
 
-    private AuthRequestManager $authRequestManager;
+    private AuthRequestManagerApi $authRequestManager;
 
-    public function __construct(FeedRepository $feedRepository, FeedRequestManager $feedRequestManager, AuthRequestManager $authRequestManager)
+    public function __construct(FeedRepository $feedRepository, FeedRequestManagerApi $feedRequestManager, AuthRequestManagerApi $authRequestManager)
     {
         $this->feedRepository = $feedRepository;
         $this->feedRequestManager = $feedRequestManager;

@@ -22,7 +22,7 @@ class FeedTest extends TestCase
         $this->feed = Feed::factory()->create(
             [
                 "title" => "sameTitle",
-                "link" => "sameLink"
+                "link" => "http://sameLink.com"
             ]
         ); // create 10 feeds
 
@@ -30,7 +30,7 @@ class FeedTest extends TestCase
             'title' => 'testTitle'
         ]);
         $this->feed = Feed::factory(1)->create([
-            'link' => 'testLink'
+            'link' => 'http://testLink.com'
         ]);
 
         $this->feed = Feed::factory(1)->create([
@@ -93,22 +93,22 @@ class FeedTest extends TestCase
     public function index_returns_all_feeds_as_json_filtered_link()
     {
         $filter = [
-            "link" => "testLink"
+            "link" => "http://testLink.com"
         ];
 
         $response = $this->call("GET", route('feeds.index'), $filter);
 
         $this->assertEquals(RequestConstants::STATUS_CODES['success'], $response['status']);
 
-        $this->assertCount(1, $response['feeds']['data']); // only one a link testLink
-        $this->assertEquals('testLink', $response['feeds']['data'][0]['link']);
+        $this->assertCount(1, $response['feeds']['data']); // only one a link http://testLink.com
+        $this->assertEquals('http://testLink.com', $response['feeds']['data'][0]['link']);
     }
 
     /** @test */
     public function index_returns_empty_items_as_json_filtered_link_non_existent()
     {
         $filter = [
-            "link" => "testLink2"
+            "link" => "http://testLink.com2"
         ];
 
         $response = $this->call("GET", route('feeds.index'), $filter);
@@ -125,7 +125,7 @@ class FeedTest extends TestCase
     {
         $filter = [
             "title" => "sameTitle",
-            "link" => "sameLink"
+            "link" => "http://sameLink.com"
         ];
 
         $response = $this->call("GET", route('feeds.index'), $filter);
@@ -133,7 +133,7 @@ class FeedTest extends TestCase
         $this->assertEquals(RequestConstants::STATUS_CODES['success'], $response['status']);
 
         $this->assertCount(1, $response['feeds']['data']);
-        $this->assertEquals('sameLink', $response['feeds']['data'][0]['link']);
+        $this->assertEquals('http://sameLink.com', $response['feeds']['data'][0]['link']);
         $this->assertEquals('sameTitle', $response['feeds']['data'][0]['title']);
     }
 
@@ -142,7 +142,7 @@ class FeedTest extends TestCase
     {
         $filter = [
             "title" => "testTitle",
-            "link" => "testLink2"
+            "link" => "http://testLink.com2"
         ];
 
         $response = $this->call("GET", route('feeds.index'), $filter);
@@ -258,7 +258,7 @@ class FeedTest extends TestCase
     {
         $data = [
             "title" => "testTitle2",
-            "link" => "testLink2",
+            "link" => "http://testLink.com2",
             "source" => "successCreateSource",
             "source_url" => "http://test.com",
             "publish_date" => null,
@@ -275,7 +275,7 @@ class FeedTest extends TestCase
     {
         $data = [
             "title" => "testTitle2",
-            "link" => "testLink2",
+            "link" => "testLink.",
             "source" => "successCreateSource",
             "source_url" => "http://test.com",
             "publish_date" => DateTime::createFromFormat("Y-m-d H:i:s", "2020-02-01 12:12:00"),
@@ -295,7 +295,7 @@ class FeedTest extends TestCase
             "title" => "testTitle2",
             "link" => "http://test.com",
             "source" => "successCreateSource",
-            "source_url" => "testLink2",
+            "source_url" => "httpqwsq://testLink",
             "publish_date" => DateTime::createFromFormat("Y-m-d H:i:s", "2020-02-01 12:12:00"),
             "description" => "successCreateDescription"
         ];

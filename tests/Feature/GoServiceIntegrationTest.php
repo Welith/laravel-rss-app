@@ -111,20 +111,6 @@ class GoServiceIntegrationTest extends TestCase
     }
 
     /** @test */
-    public function fetch_fail_invalid_urls()
-    {
-        $data = [
-            'urls' => ["test"],
-            'username' => 'emerchantpay',
-            'password' => 'test'
-        ];
-
-        $response = $this->call("POST", route('feeds.go-fetch'), $data);
-        $this->assertEquals(RequestConstants::STATUS_CODES['validation'], $response['status']);
-        $this->assertEquals("The urls.0 must be a valid URL.", $response['message']['urls.0'][0]);
-    }
-
-    /** @test */
     public function fetch_fail_null_urls()
     {
         $data = [

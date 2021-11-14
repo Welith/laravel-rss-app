@@ -125,7 +125,7 @@ class FeedController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'urls' => 'required|array',
-            'urls.*' => 'required|url',
+            'urls.*' => 'required',
             'username' => 'required',
             'password' => 'required'
         ]);

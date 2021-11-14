@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Queue\QueueService;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Command\Command as CommandAlias;
+use JsonException;
 
 class FetchFeeds extends Command
 {
@@ -39,12 +39,12 @@ class FetchFeeds extends Command
      * Execute the console command.
      *
      * @return int
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function handle(): int
     {
         $this->queueService->dispatch(explode(",", getenv("RSS_FEED_ARRAY")), getenv("QUEUE_NAME"), getenv("QUEUE_NAME"));
 
-        return CommandAlias::SUCCESS;
+        return "Successfully sent message to " . getenv("QUEUE_NAME") . " queue.";
     }
 }

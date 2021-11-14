@@ -31,7 +31,7 @@ class QueueService
 
         $message = new AMQPMessage(json_encode($message, JSON_THROW_ON_ERROR), $options);
 
-        if (getenv("APP_ENV") === 'prod') {
+        if (getenv("APP_ENV") === 'prod') { // SSL certificate for production environment
 
             $sslOptions = [
                 'verify_peer' => false,

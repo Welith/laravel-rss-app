@@ -117,6 +117,8 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
     {
         $query = Feed::query();
 
+       // dd($filter);
+
         if (isset($filter['link'])) {
 
             $query->where('link', "LIKE", "%{$filter['link']}%");
@@ -137,7 +139,7 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
             $query->whereDate('publish_date', "<=", $filter['publish_date_to']);
         }
 
-        return $query->orderBy('publish_date', 'DESC')->paginate();
+        return $query->orderBy('publish_date', 'DESC')->paginate(20);
     }
 
     /**

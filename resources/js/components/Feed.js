@@ -57,6 +57,14 @@ class Feed extends Component {
                 itemsCountPerPage: res.data.feeds.per_page,
                 totalItemsCount: res.data.feeds.total
             })
+        } else if (res.data.status === 400) {
+
+            swal({
+                title: "Error!",
+                text: "Filter dates are incorrect!",
+                icon: "error",
+                button: "OK",
+            });
         }
     }
 
@@ -171,7 +179,6 @@ class Feed extends Component {
 
         let feed_HTML_TABLE;
 
-        console.log(this.state)
         if (this.state.loading) {
 
             feed_HTML_TABLE = <tr><td colSpan="2">Loading ...</td></tr>
@@ -220,6 +227,7 @@ class Feed extends Component {
 
                                     <label htmlFor="publish_date_to" className="m-1">Date To:</label>
                                     <input type="datetime-local" className="form-control m-1" value={this.state.publish_date_to} onChange={this.handleInput} name="publish_date_to" id="publish_date_to"/>
+
 
                                     <button type="submit" className="btn btn-primary btn-sm float-right">Filter</button>
 

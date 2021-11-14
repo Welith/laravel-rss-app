@@ -13,7 +13,8 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
         "php-amqplib/rabbitmq-bundle": "^2.10",
-        "psr/log": "1.1.4"
+        "psr/log": "1.1.4",
+        "ext-http": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

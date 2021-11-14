@@ -17,10 +17,12 @@ abstract class RequestConstants
     ];
 
     public const RESPONSES = [
+        "fetched_go" => "RSS Feeds successfully fetched!",
         "created" => "Item Created Successfully!",
         "updated" => "Item Updated Successfully!",
         "deleted" => "Item Deleted Successfully!",
         "not_found" => "Item Not Found!",
+        "not_found_go" => "No RSS Feeds Are Available!",
         "duplicate" => "An Item With The Same Parameters Already Exists!",
         "unauthorized" => "Invalid login details"
     ];

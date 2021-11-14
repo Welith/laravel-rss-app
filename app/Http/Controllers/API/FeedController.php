@@ -41,7 +41,7 @@ class FeedController extends Controller
             'source' => 'nullable|max:191',
             'source_url' => 'nullable|url',
             'description' => 'required',
-            'publish_date' => 'required'
+            'publish_date' => 'required|date'
         ]);
 
         if ($validator->fails()) {
@@ -67,6 +67,22 @@ class FeedController extends Controller
     public function index(Request $request): JsonResponse
     {
         $filters = $request->query->all();
+
+        if (!empty($filters)) {
+
+            $validator = Validator::make($request->query->all(), [
+                'publish_date_from' => 'date|before_or_equal:publish_date_to',
+                'publish_date_to' => 'date|after_or_equal:publish_date_from',
+            ]);
+
+            if ($validator->fails()) {
+
+                return response()->json([
+                    'status' => RequestConstants::STATUS_CODES['validation'],
+                    'message' => $validator->errors()
+                ]);
+            }
+        }
 
         $feeds = $this->feedRepository->getFiltered($filters);
 
@@ -108,7 +124,8 @@ class FeedController extends Controller
     public function fetchFromGolang(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'urls' => 'required',
+            'urls' => 'required|array',
+            'urls.*' => 'required|url',
             'username' => 'required',
             'password' => 'required'
         ]);
@@ -138,7 +155,7 @@ class FeedController extends Controller
 
             return response()->json([
                 'status' => RequestConstants::STATUS_CODES['not_found'],
-                'message' => RequestConstants::RESPONSES['not_found']
+                'message' => RequestConstants::RESPONSES['not_found_go']
             ]);
         }
 
@@ -153,7 +170,7 @@ class FeedController extends Controller
                 'source' => 'nullable|max:191',
                 'source_url' => 'nullable|url',
                 'description' => 'required',
-                'publish_date' => 'required'
+                'publish_date' => 'required|date'
             ]);
 
             $duplicate = $this->feedRepository->checkForDuplicates($feed);
@@ -166,7 +183,7 @@ class FeedController extends Controller
 
         return response()->json([
             'status' => RequestConstants::STATUS_CODES['success'],
-            'message' => RequestConstants::RESPONSES['created']
+            'message' => RequestConstants::RESPONSES['fetched_go']
         ]);
     }
 
@@ -184,7 +201,7 @@ class FeedController extends Controller
             'source' => 'nullable|max:191',
             'source_url' => 'nullable|url',
             'description' => 'required',
-            'publish_date' => 'required'
+            'publish_date' => 'required|date'
         ]);
 
         if ($validator->fails()) {

@@ -32,4 +32,4 @@ jobs:
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
-        run: vendor/bin/phpunit --exclude-group Local
+        run: vendor/bin/phpunit --filter 'Tests\\Feature\\GoServiceIntegrationTest'

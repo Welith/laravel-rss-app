@@ -1,6 +1,8 @@
 #Laravel RSS Application
 A Laravel CRUD application which communicates with the GoLang RSS Services.
 
+<a href="https://github.com/welith/laravel-rss-app/actions"><img src="https://github.com/Welith/laravel-rss-app/workflows/Laravel/badge.svg" alt="Actions"></a>
+
 ## Specification
 1. Use the latest Laravel version
 2. Use Bootstrap and Blade (React has been used instead of blade (as per bonus requirements))
@@ -114,6 +116,12 @@ Github actions are configured as pipelines for CI in order to automatically run 
 triggered by pushing to master or creating a MR (merge request) to master.
 
 Latest Status:
+
+## Running tests
+
+The GoServiceIntegrationTest should be run when the services are up and running (it is filtered in the github actions)
+
+``` vendor/bin/sail test ```
 
 ## Contact
 

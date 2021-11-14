@@ -7,7 +7,10 @@ use Tests\TestCase;
 
 class GoServiceIntegrationTest extends TestCase
 {
-    /** @test */
+    /**
+     * @test
+     * @group Local
+     */
     public function fetch_success()
     {
         $data = [
@@ -124,7 +127,10 @@ class GoServiceIntegrationTest extends TestCase
         $this->assertEquals("The urls.0 field is required.", $response['message']['urls.0'][0]);
     }
 
-    /** @test */
+    /**
+     * @test
+     * @group Local
+     */
     public function fetch_fail_no_feeds()
     {
         $data = [

@@ -33,7 +33,7 @@ class FeedRequestManagerApi extends AbstractApiHttpRequest
      * @throws GuzzleException
      * @throws \JsonException
      */
-    public function getFeeds(array $urls, string $authToken): mixed
+    public function parseFeeds(array $urls, string $authToken): mixed
     {
         $this->_headers->add('Authorization', "Bearer " . $authToken);
         return $this->post('/v1/feeds', $urls);

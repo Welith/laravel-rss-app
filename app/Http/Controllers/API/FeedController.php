@@ -149,7 +149,7 @@ class FeedController extends Controller
             ]);
         }
 
-        $feeds = $this->feedRequestManager->getFeeds($request->all(), $accessToken);
+        $feeds = $this->feedRequestManager->parseFeeds($request->all(), $accessToken);
 
         if (empty($feeds)) {
 

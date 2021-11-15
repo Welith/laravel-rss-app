@@ -106,7 +106,7 @@ QUEUE_NAME=rss
 As mentioned earlier, this app needs to be set-up first, in order to correctly integrate the GoLang service. The Laravel App has two ways of getting feeds:
 
 - Through, the `Fetch Feed` button, which directly hits the GoLang service API endpoint. The feeds are taken from the .env var ``` MIX_RSS_FEED_ARRAY ```
-- Through a command (the command has been scheduled to run hourly). The command takes the URLs needed from the .env var ``` RSS_FEED_ARRAY ``` which is run in the following way: <br>
+- Through a command (the command has been scheduled to run hourly). The command takes the URLs (and sends them to a rabbitMQ queue, which is processed by the GoLang service) needed from the .env var ``` RSS_FEED_ARRAY ``` which is run in the following way: <br>
 ``` vendor/bin/sail artisan fetch:feed (if the app is ran through docker) ``` <br>
 ``` php artisan fetch:feed (if ran locally) ```
 

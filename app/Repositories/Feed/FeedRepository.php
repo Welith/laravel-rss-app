@@ -117,8 +117,6 @@ class FeedRepository extends BaseRepository implements FeedRepositoryInterface
     {
         $query = Feed::query();
 
-       // dd($filter);
-
         if (isset($filter['link'])) {
 
             $query->where('link', "LIKE", "%{$filter['link']}%");

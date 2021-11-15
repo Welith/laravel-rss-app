@@ -115,13 +115,17 @@ As mentioned earlier, this app needs to be set-up first, in order to correctly i
 Github actions are configured as pipelines for CI in order to automatically run the tests for the project. They are
 triggered by pushing to master or creating a MR (merge request) to master.
 
-Latest Status:
+Latest Status: <br>
+<a href="https://github.com/welith/laravel-rss-app/actions"><img src="https://github.com/Welith/laravel-rss-app/workflows/Laravel/badge.svg" alt="Actions"></a>
+
 
 ## Running tests
 
 The GoServiceIntegrationTest should be run when the services are up and running (it is filtered in the github actions)
 
 ``` vendor/bin/sail test ```
+
+The `.env.testing` requires the `GOLANG_SERVICE` variable to be set according to your golang-rss-service set-up.
 
 ## Contact
 

@@ -61,7 +61,7 @@ class AuthRequestManagerApi extends AbstractApiHttpRequest
      * @param array $options
      * @return PromiseInterface|mixed|HttpException|void|null
      * @throws GuzzleException
-     * @throws \JsonException
+     * @throws \JsonException|GeneralException
      */
     public function request(string $method, string $uri, array $params, $data, bool $json = true, array $options = [])
     {
@@ -94,7 +94,7 @@ class AuthRequestManagerApi extends AbstractApiHttpRequest
                 return null;
             }
 
-            return null;
+            throw new GeneralException("Internal Server Error!");
         }
 
         $this->_headers->flush();

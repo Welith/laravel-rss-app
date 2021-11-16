@@ -28,7 +28,17 @@ class AddFeed extends Component {
 
         e.preventDefault();
 
-        const res = await axios.post('/api/feeds', this.state);
+        const res = await axios.post('/api/feeds', this.state).catch(function (err) {
+
+            if (err) {
+                swal({
+                    title: "Error!",
+                    text: "Internal Server Error!",
+                    icon: "error",
+                    button: "OK",
+                })
+            }
+        });
 
         if (res.data.status === 200) {
 

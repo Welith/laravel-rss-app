@@ -57,7 +57,17 @@ class EditFeed extends Component {
 
         e.preventDefault();
 
-        const res = await axios.put(`/api/feeds/${this.feed_id}/edit`, this.state);
+        const res = await axios.put(`/api/feeds/${this.feed_id}/edit`, this.state).catch(function (err) {
+
+            if (err) {
+                swal({
+                    title: "Error!",
+                    text: "Internal Server Error!",
+                    icon: "error",
+                    button: "OK",
+                })
+            }
+        });
 
         if (res.data.status === 200) {
 

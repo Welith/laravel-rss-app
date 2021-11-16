@@ -45,6 +45,16 @@ class Feed extends Component {
                 publish_date_from: publish_date_from,
                 publish_date_to: publish_date_to,
             }
+        }).catch(function (err) {
+
+            if (err) {
+                swal({
+                    title: "Error!",
+                    text: "Internal Server Error!",
+                    icon: "error",
+                    button: "OK",
+                })
+            }
         });
 
         if (res.data.status === 200) {
@@ -96,7 +106,17 @@ class Feed extends Component {
                     const deleteButton = this.state.tmp_button;
                     deleteButton.innerText = "Deleting...";
 
-                    const res = await axios.delete(`/api/feeds/${this.state.tmp_id}/delete`);
+                    const res = await axios.delete(`/api/feeds/${this.state.tmp_id}/delete`).catch(function (err) {
+
+                        if (err) {
+                            swal({
+                                title: "Error!",
+                                text: "Internal Server Error!",
+                                icon: "error",
+                                button: "OK",
+                            })
+                        }
+                    });
 
                     if (res.data.status === 200) {
 
@@ -128,8 +148,18 @@ class Feed extends Component {
         e.preventDefault();
 
         const data = { urls: this.state.urls, username: this.state.username, password: this.state.password};
-        const res = await axios.post(`/api/feeds/fetch-go`, data);
-        console.log(res)
+        const res = await axios.post(`/api/feeds/fetch-go`, data).catch(function (err) {
+
+            if (err) {
+                swal({
+                    title: "Error!",
+                    text: "Internal Server Error!",
+                    icon: "error",
+                    button: "OK",
+                })
+            }
+        });
+
         if (res.data.status === 200) {
 
             swal({

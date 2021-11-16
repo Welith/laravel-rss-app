@@ -26,7 +26,17 @@ class ShowFeed extends Component {
 
     async componentDidMount(){
 
-        const res = await axios.get(`/api/feeds/${this.feed_id}`)
+        const res = await axios.get(`/api/feeds/${this.feed_id}`).catch(function (err) {
+
+            if (err) {
+                swal({
+                    title: "Error!",
+                    text: "Internal Server Error!",
+                    icon: "error",
+                    button: "OK",
+                })
+            }
+        });
 
         if (res.data.status === 200) {
 
